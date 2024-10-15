@@ -1,5 +1,6 @@
 import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
+
 import {
   Select,
   SelectContent,
@@ -9,6 +10,8 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+
+
 
 function CommonForm({
   formControls,
@@ -119,7 +122,7 @@ function CommonForm({
         ))}
       </div>
 
-      <Button type="submit" className="mt-2 w-full">
+      <Button type="submit" className="mt-2 w-full bg-black text-white">
         {buttonText || "submit"}
       </Button>
     </form>
