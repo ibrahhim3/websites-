@@ -9,7 +9,7 @@ const cors = require('cors');
 
 mongoose
 .connect('mongodb+srv://mserifnas21:1mEsoWzRRbhhU0Mq@batas.6mw8s.mongodb.net/')
-.then(() => console.log('MangoDB connected'))
+.then(() => console.log('MongoDB connected'))
 .catch((error) => console.log(error));
 
 
