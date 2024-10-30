@@ -14,7 +14,7 @@ const registerUser = async(req, res) => {
     try{
 
         const hashPassword = await bycrypt.hash(password, 12);
-        const newUSer = new User({
+        const newUser = new User({
             userName, 
             email , 
             password : hashPassword,
