@@ -1,6 +1,6 @@
-const MongoDB = require("mongoose");
+const mongoose = require("mongoose");
 
-const UserSchema = MongoDB.Schema( 
+const UserSchema = mongoose.Schema( 
     {
         Username : {
             type : String ,
