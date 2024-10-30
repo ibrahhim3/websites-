@@ -22,7 +22,6 @@ export const registerFormControls = [
   },
 ];
 
-
 export const loginFormControls = [
   {
     name: "email",

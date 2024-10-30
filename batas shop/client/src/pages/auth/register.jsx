@@ -18,19 +18,23 @@ function AuthRegister() {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (event) => {
+  function onSubmit(event) {
     event.preventDefault();
     dispatch(registerUser(formData)).then((data) => {
-      const message = data?.payload?.message;
-
       if (data?.payload?.success) {
-        toast({ title: message });
+        toast({
+          title: data?.payload?.message,
+        });
         navigate("/auth/login");
       } else {
-        toast({ title: message, variant: "destructive" });
+        toast({
+          title: data?.payload?.message,
+          variant: "destructive",
+        });
       }
     });
-  };
+  }
+
 
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
@@ -53,7 +57,7 @@ function AuthRegister() {
         buttonText="Sign Up"
         formData={formData}
         setFormData={setFormData}
-        onSubmit={handleSubmit}
+        onSubmit={onSubmit}
       />
     </div>
   );
