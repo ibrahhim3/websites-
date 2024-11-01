@@ -12,6 +12,12 @@ const registerUser = async(req, res) => {
     const {userName, email, password} = req.body;
 
     try{
+        const checkUser = await User.findOne({ email});
+        if(checkUser)
+            return res.json({
+        success: false,
+        message: "user already exists",
+        });
 
         const hashPassword = await bcrypt.hash(password, 12);
         const newUser = new User({
@@ -37,8 +43,26 @@ const registerUser = async(req, res) => {
 
 //login
 const login = async(req, res) =>{
+    const { email, password} = req.body;
 
     try{
+        const checkUser = await User.findOne({ email});
+        if(!checkUser) return res.json({
+            success: false,
+            message: "User does not exist!!!"
+        });
+
+        const checkPasswordMatch = await bcrypt.compare(password, checkUser.password);
+        if(!checkPasswordMatch) return res.json({
+            success:false,
+            message: "Incorrect Password! please try again"
+        });
+
+        const token = jwt.sign({
+            id: checkUser.id,
+            role: checkUser.role,
+            email: checkUser.email
+        })
 
     }catch(e){
         console.log(e);
