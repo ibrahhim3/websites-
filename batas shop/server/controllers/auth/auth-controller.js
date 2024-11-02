@@ -42,7 +42,7 @@ const registerUser = async(req, res) => {
 
 
 //login
-const login = async(req, res) =>{
+const loginUser = async(req, res) =>{
     const { email, password} = req.body;
 
     try{
@@ -62,7 +62,18 @@ const login = async(req, res) =>{
             id: checkUser.id,
             role: checkUser.role,
             email: checkUser.email
-        })
+        }, 'CLIENT_SECRET_KEY', {expiresIn: '60' });
+
+        res.cookie('token', token, {httpOnly: true, secure : false}).json({
+            succes: true,
+            message: 'logged in successfully',
+            user: {
+                email : checkUser.email,
+                role : checkUser.role,
+                id : checkUser.role,
+                userName: checkUser.userName,
+            },
+        });
 
     }catch(e){
         console.log(e);
@@ -83,8 +94,7 @@ const login = async(req, res) =>{
 
 
 
-module.exports = {registerUser };
-
+module.exports = {registerUser, loginUser };
 
 
 
