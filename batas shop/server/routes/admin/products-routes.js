@@ -12,7 +12,7 @@ router.post('/upload-image', upload.single("my_file"), handleImageUpload);
 
 
 
-
+module.exports = router;
 
 
 
