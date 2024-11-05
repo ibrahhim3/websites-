@@ -1,30 +1,33 @@
-import { BadgeCheck, ChartNoAxesCombined, LayoutDashboard, ShoppingBasket } from "lucide-react";
+import {
+  BadgeCheck,
+  ChartNoAxesCombined,
+  LayoutDashboard,
+  ShoppingBasket,
+} from "lucide-react";
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet"; // Adjust as per your project structure
 
-
- const adminSidebarMenuItems = [
+const adminSidebarMenuItems = [
   {
     id: "dashbaord",
-    label: "dashbaord",
-    path: "/admin/dashbaord",
+    label: "dashboard",
+    path: "/admin/dashboard",
     icon: <LayoutDashboard />,
-
-  }, {
+  },
+  {
     id: "products",
     label: "products",
     path: "/admin/products",
     icon: <ShoppingBasket />,
-
-  }, {
+  },
+  {
     id: "orders",
     label: "orders",
     path: "/admin/orders",
     icon: <BadgeCheck />,
-
-  }
+  },
 ];
-
 
 function MenuItems() {
   const navigate = useNavigate();
@@ -37,7 +40,7 @@ function MenuItems() {
           onClick={() => {
             navigate(menuItem.path);
           }}
-          className="flex cursor-pointer text-xl items-center gap-2 rounded-md px-3 py-2 text-muted-foreground hover:bg-muted hover:text-foreground"
+          className="flex cursor-pointer text-xl items-center gap-2 rounded-md px-3 py-2 text-gray-600 hover:bg-gray-200 hover:text-black"
         >
           {menuItem.icon}
           <span>{menuItem.label}</span>
@@ -47,23 +50,37 @@ function MenuItems() {
   );
 }
 
-function AdminSideBar() {
+function AdminSideBar({ open, setOpen }) {
   const navigate = useNavigate();
 
   return (
     <Fragment>
-      <aside className="hidden w-64 flex-col border-r bg-background p-6 lg:flex">
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="left" className="w-64 bg-white ">
+          <div className="flex flex-col h-full">
+            <SheetHeader className="border-b ">
+              <SheetTitle className="flex gap-2 mt-5 mb-5 ">
+                <ChartNoAxesCombined size={30} />
+                <h1 className="text-2xl font-extrabold text-black ">
+                  Admin Panel
+                </h1>
+              </SheetTitle>
+            </SheetHeader>
+            <MenuItems />
+          </div>
+        </SheetContent>
+      </Sheet>
+      <aside className="hidden w-64 flex-col border-r bg-background p-6 lg:flex ">
         <div
           onClick={() => navigate("/admin/dashboard")}
-          className="flex cursor-pointer items-center gap-2"
+          className="flex cursor-pointer items-center gap-2 "
         >
           <ChartNoAxesCombined size={30} />
-          <h1 className="text-2xl font-extrabold">Admin Panel</h1>
+          <h1 className="text-2xl font-extrabold ">Admin Panel</h1>
         </div>
-        <MenuItems/>
+        <MenuItems />
       </aside>
     </Fragment>
   );
 }
-
 export default AdminSideBar;
