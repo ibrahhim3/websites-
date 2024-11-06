@@ -1,4 +1,3 @@
-import { Label } from "@radix-ui/react-label";
 import { Input } from "../ui/input";
 import {
   Select,
@@ -9,8 +8,7 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
-
-
+import { Label } from "../ui/label";
 
 function CommonForm({
   formControls,
@@ -54,13 +52,17 @@ function CommonForm({
             }
             value={value}
           >
-            <SelectTrigger className="w-full ">
-              <SelectValue placeholder={getControlItem.placeholder} />
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder={getControlItem.label} />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className=" bg-white text-black ">
               {getControlItem.options && getControlItem.options.length > 0
                 ? getControlItem.options.map((optionItem) => (
-                    <SelectItem key={optionItem.id} value={optionItem.id}>
+                    <SelectItem
+                      key={optionItem.id}
+                      value={optionItem.id}
+                      className="hover:bg-gray-100 cursor-pointer"
+                    >
                       {optionItem.label}
                     </SelectItem>
                   ))
