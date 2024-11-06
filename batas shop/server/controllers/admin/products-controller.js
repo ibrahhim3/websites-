@@ -39,7 +39,7 @@ const addProduct =  async(req,res)=> {
 
     }catch(e){
         console.log(e)
-        res.json({
+        res.status(500).json({
             success : false,
             message : 'Error occured!!!',
         });
@@ -59,7 +59,7 @@ const fetchAllProducts =  async(req,res)=>{
 
     }catch(e){
         console.log(e)
-        res.json({
+        res.status(500).json({
             success : false,
             message : 'Error occured!!!',
         });
@@ -97,7 +97,7 @@ const editProduct =  async(req,res)=>{
             });
     } catch(e){
         console.log(e)
-        res.json({
+        res.status(500).json({
             success : false,
             message : 'Error occured!!!',
         });
