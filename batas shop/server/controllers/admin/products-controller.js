@@ -27,9 +27,9 @@ const handleImageUpload = async(req,res)=> {
 // add a new products
 const addProduct =  async(req,res)=> {
     try{
-        const {image, title, description, category, brand, price, salePrice, totalStock} = req.body;
+        const {image, title, description, category, price, salePrice, totalStock} = req.body;
 
-        const newlyCreatedProduct = new Product({image, title, description, category, brand, price, salePrice, totalStock});
+        const newlyCreatedProduct = new Product({image, title, description, category, price, salePrice, totalStock});
 
         await newlyCreatedProduct.save();
         res.status(201).json({
@@ -72,7 +72,7 @@ const fetchAllProducts =  async(req,res)=>{
 const editProduct =  async(req,res)=>{
     try{
         const {id} = req.params;
-        const {image, title, description, category, brand, price, salePrice, totalStock} = req.body;
+        const {image, title, description, category,price, salePrice, totalStock} = req.body;
 
         const findProduct = await Product.findById(id);
         if(!findProduct)
@@ -84,7 +84,6 @@ const editProduct =  async(req,res)=>{
             findProduct.title = title || findProduct.title;
             findProduct.description = title || findProduct.description;
             findProduct.category = title || findProduct.category;
-            findProduct.brand = title || findProduct.brand;
             findProduct.price = title || findProduct.price;
             findProduct.salePrice = title || findProduct.salePrice;
             findProduct.totalStock = title || findProduct.totalStock;

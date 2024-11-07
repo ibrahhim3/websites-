@@ -60,11 +60,11 @@ export const addProductFormElements = [
     name: "category",
     componentType: "select",
     options: [
-      { id: "men", label: "Sweets" },
-      { id: "women", label: "Teas" },
-      { id: "kids", label: "Spices" },
-      { id: "accessories", label: "Honey" },
-      { id: "footwear", label: "Perfumes" },
+      { id: "Sweets", label: "Sweets" },
+      { id: "Teas", label: "Teas" },
+      { id: "Spices", label: "Spices" },
+      { id: "Honey", label: "Honey" },
+      { id: "Perfumes", label: "Perfumes" },
     ],
   },
   {
