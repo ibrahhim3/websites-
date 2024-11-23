@@ -1,6 +1,7 @@
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 import { Badge } from "../ui/badge";
+import { categoryOptionsMap } from "@/config";
 
 
 function ShoppingProductTile( {product}) {  // Destructuring `product` here
@@ -22,8 +23,8 @@ function ShoppingProductTile( {product}) {  // Destructuring `product` here
         <CardContent className="p-4">
           <h2 className="text-xl font-bold mb-2">{product?.title}</h2> {/* Fixed typo here */}
           <div className="flex justify-between items-center mb-2">
-            <span className="text-sm text-muted-foreground">
-              {product?.category}
+            <span className="text-[16px] text-muted-foreground">
+            {categoryOptionsMap[product?.category]}
             </span>
           </div>
           <div className="flex justify-between items-center mb-2">
@@ -32,11 +33,11 @@ function ShoppingProductTile( {product}) {  // Destructuring `product` here
                 product?.salePrice > 0 ? "line-through" : ""
               } text-lg font-semibold text-primary`}
             >
-              {product?.price}
+              ${product?.price}
             </span>
             {product?.salePrice > 0 ? (
               <span className="text-lg font-semibold text-primary">
-                {product?.salePrice}
+                ${product?.salePrice}
               </span>
             ) : null}
           </div>
