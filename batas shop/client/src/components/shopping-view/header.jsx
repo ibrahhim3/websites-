@@ -1,4 +1,4 @@
-import { HousePlug, LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
+import {  LogOut, Menu, ShoppingCart, UserCog } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
 import { useDispatch, useSelector } from "react-redux";
@@ -25,7 +25,7 @@ import { logoutUser } from "@/store/auth-slice";
 function MenuItems() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [setSearchParams] = useSearchParams();
 
   function handleNavigate(getCurrentMenuItem) {
     sessionStorage.removeItem("filters");
@@ -121,11 +121,13 @@ function ShoppingHeader() {
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-3">
+
           <img
             src="/images/logo.png" // Path to the logo in the public folder
             alt="BATAŞ Logo"
             className="h-16 w-16 rounded-full object-cover bg-black" // Bigger size and circular shape
           />
+
           <span className="flex flex-col items-center text-red-600">
             <span className="text-4xl  font-bold">BATAŞ</span>
             <span className="text-lg font-medium ">spice shop</span>
@@ -150,7 +152,7 @@ function ShoppingHeader() {
         <div className="hidden lg:block">
           <MenuItems />
         </div>
-
+        {isAuthenticated ? <div></div> : null}
         <div className="hidden lg:block">
           <HeaderRightContent />
         </div>
