@@ -43,7 +43,7 @@ function ShoppingProductTile( {product,handleGetProductDetails}) {  // Destructu
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full opacity-60 cursor-not-allowed bg-gray-300 hover:bg-gray-400">
+          <Button className="w-full bg-red-600 hover:bg-red-700">
             Add to cart
           </Button>
         </CardFooter>

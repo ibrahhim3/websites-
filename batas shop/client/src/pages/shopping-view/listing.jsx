@@ -1,4 +1,5 @@
 import ProductFilter from "@/components/shopping-view/filter";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { Button } from "@/components/ui/button";
 import {
@@ -125,10 +126,10 @@ function ShoppingListing() {
                   <span>Sort by</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[200px]">
+              <DropdownMenuContent align="end" className="w-[200px] bg-white  ">
                 <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
                   {sortOptions.map((sortItem) => (
-                    <DropdownMenuRadioItem
+                    <DropdownMenuRadioItem className=" hover:bg-gray-200 cursor-pointer"
                       value={sortItem.id}
                       key={sortItem.id}
                     >
@@ -151,6 +152,11 @@ function ShoppingListing() {
             : null}
         </div>
       </div>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
      
     </div>
   );
