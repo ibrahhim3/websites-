@@ -4,10 +4,10 @@ import { Badge } from "../ui/badge";
 import { categoryOptionsMap } from "@/config";
 
 
-function ShoppingProductTile( {product}) {  // Destructuring `product` here
+function ShoppingProductTile( {product,handleGetProductDetails}) {  // Destructuring `product` here
   return (
     <Card className="w-full max-w-sm mx-auto">
-      <div>
+      <div onClick={() => handleGetProductDetails(product?._id)}>
         <div className="relative">
           <img
             src={product?.image}
