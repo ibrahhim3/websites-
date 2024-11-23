@@ -23,7 +23,7 @@ const shopProductsRouter = require("./routes/shop/products-routes");
 
 
 mongoose
-.connect('mongodb+srv://mserifnas21:1mEsoWzRRbhhU0Mq@batas.6mw8s.mongodb.net/')
+.connect('mongodb+srv://batasspice:Batas123@batas.o6dfe.mongodb.net/')
 .then(() => console.log('MongoDB connected'))
 .catch((error) => console.log(error));
 
