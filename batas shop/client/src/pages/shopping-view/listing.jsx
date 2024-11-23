@@ -13,11 +13,7 @@ import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
-
-
-
-
-
+import { useSearchParams } from "react-router-dom";
 
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
