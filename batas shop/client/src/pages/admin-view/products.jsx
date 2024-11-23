@@ -2,10 +2,20 @@ import ProductImageUpload from "@/components/admin-view/image-uplaod";
 import AdminProductTile from "@/components/admin-view/product-tile";
 import CommonForm from "@/components/common/form";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { addProductFormElements } from "@/config";
 import { useToast } from "@/hooks/use-toast";
-import { addNewProduct, deleteProduct, editProduct, fetchAllProducts } from "@/store/admin/products-slice";
+import {
+  addNewProduct,
+  deleteProduct,
+  editProduct,
+  fetchAllProducts,
+} from "@/store/admin/products-slice";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -95,14 +105,18 @@ function AdminProducts() {
   return (
     <Fragment>
       <div className="mb-5 w-full flex justify-end">
-        <Button className=" bg-black text-white" onClick={() => setOpenCreateProductsDialog(true)}>
+        <Button
+          className=" bg-black text-white"
+          onClick={() => setOpenCreateProductsDialog(true)}
+        >
           Add New Product
         </Button>
       </div>
-      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4 ">
+      <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
         {productList && productList.length > 0
           ? productList.map((productItem) => (
               <AdminProductTile
+                key={productItem.id}
                 setFormData={setFormData}
                 setOpenCreateProductsDialog={setOpenCreateProductsDialog}
                 setCurrentEditedId={setCurrentEditedId}
@@ -112,6 +126,7 @@ function AdminProducts() {
             ))
           : null}
       </div>
+
       <Sheet
         open={openCreateProductsDialog}
         onOpenChange={() => {
@@ -120,7 +135,10 @@ function AdminProducts() {
           setFormData(initialFormData);
         }}
       >
-        <SheetContent side="right" className="overflow-auto  bg-white text-black">
+        <SheetContent
+          side="right"
+          className="overflow-auto  bg-white text-black"
+        >
           <SheetHeader>
             <SheetTitle>
               {currentEditedId !== null ? "Edit Product" : "Add New Product"}
@@ -142,7 +160,6 @@ function AdminProducts() {
               setFormData={setFormData}
               buttonText={currentEditedId !== null ? "Edit" : "Add"}
               formControls={addProductFormElements}
-              isBtnDisabled={!isFormValid()}
             />
           </div>
         </SheetContent>

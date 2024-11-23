@@ -42,8 +42,8 @@ function ShoppingProductTile( {product}) {  // Destructuring `product` here
           </div>
         </CardContent>
         <CardFooter>
-          <Button className="w-full opacity-60 cursor-not-allowed">
-            add to cart
+          <Button className="w-full opacity-60 cursor-not-allowed bg-gray-300 hover:bg-gray-400">
+            Add to cart
           </Button>
         </CardFooter>
       </div>

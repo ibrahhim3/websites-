@@ -1,4 +1,3 @@
-
 export const registerFormControls = [
   {
     name: "userName",
@@ -39,7 +38,6 @@ export const loginFormControls = [
     type: "password",
   },
 ];
-
 
 export const addProductFormElements = [
   {
@@ -132,6 +130,17 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/search",
   },
 ];
+
+
+
+export const categoryOptionsMap = {
+  Sweets: "Sweets",
+  Teas: "Teas",
+  Spices: "Spices",
+  Honey: "Honey",
+  Perfumes: "Perfumes",
+};
+
 
 export const filterOptions = {
   category: [
