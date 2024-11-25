@@ -21,6 +21,9 @@ import {
   useSearchParams,
 } from "react-router-dom";
 import { logoutUser } from "@/store/auth-slice";
+import UserCartWrapper from "./cart-wrapper";
+import { useEffect, useState } from "react";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 
 function MenuItems() {
   const navigate = useNavigate();
@@ -66,19 +69,29 @@ function HeaderRightContent() {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [openCartSheet, setOpenCartSheet] = useState(false);
+  const { cartItems } = useSelector((state) => state.shopCart);
+
 
   function handleLogout() {
     dispatch(logoutUser());
   }
 
+  useEffect(() => {
+    dispatch(fetchCartItems(user?.id));
+  }, [dispatch]);
+
+
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-      <Button variant="outline" size="icon">
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+      <Button  onClick={() => setOpenCartSheet(true)} variant="outline" size="icon">
         <ShoppingCart className="w-6 h-6" />
 
         <span className="sr-only">User cart</span>
       </Button>
-
+      <UserCartWrapper cartItems={cartItems && cartItems.items && cartItems.items.length > 0 ? cartItems.items : []}/>
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black">
