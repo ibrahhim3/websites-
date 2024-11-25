@@ -1,16 +1,15 @@
 const mongoose = require("mongoose");
 
-const Address = new mongoose.Schema(
-    {
-        UserID : String ,
-        Country : String ,
-        City : String ,
-        Full_Address : String ,
-        ZIPCode : String ,
-        PhoneNumber : String ,
-        DescriptionNotes : String ,
-    } ,
-    { timestamps: true }
-) ;
+const AddressSchema = new mongoose.Schema(
+  {
+    userId: String,
+    address: String,
+    city: String,
+    pincode: String,
+    phone: String,
+    notes: String,
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model("Address",Address);
+module.exports = mongoose.model("Address", AddressSchema);
