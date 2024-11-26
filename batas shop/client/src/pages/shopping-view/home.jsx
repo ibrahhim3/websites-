@@ -9,17 +9,16 @@ import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useNavigate } from "react-router-dom";
 
-
 const categoriesWithIcon = [
   { id: "Baklava", label: "Baklava" },
   { id: "Turkish delight", label: "Turkish delight" },
+  { id: "Chocolate", label: "Chocolate" },
+  { id: "Spices", label: "Spices" },
+  { id: "Teas", label: "Teas" },
+  { id: "Nuts", label: "Nuts" },
   { id: "Coffee", label: "Coffee" },
   { id: "Oil", label: "Oil" },
   { id: "Cosmetics", label: "Cosmetics" },
-  { id: "Chocolate", label: "Chocolate" },
-  { id: "Nuts", label: "Nuts" },
-  { id: "Teas", label: "Teas" },
-  { id: "Spices", label: "Spices" },
   { id: "Honey", label: "Honey" },
   { id: "Perfumes", label: "Perfumes" },
 ];
@@ -46,13 +45,12 @@ function ShoppingHome() {
     return () => clearInterval(timer);
   }, [slides]);
 
-
   function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
     const currentFilter = {
       [section]: [getCurrentItem.id],
     };
-    
+
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate(`/shop/listing`);
   }
@@ -102,11 +100,13 @@ function ShoppingHome() {
           <div className="flex items-center justify-center gap-36 flex-wrap ">
             {categoriesWithIcon.map((categoryItem) => (
               <div
-              onClick={() => handleNavigateToListingPage(categoryItem, "category")}
+                onClick={() =>
+                  handleNavigateToListingPage(categoryItem, "category")
+                }
                 key={categoryItem.id}
                 className="cursor-pointer transition-shadow w-24 h-24 flex items-center justify-center"
               >
-                <div className="w-24 h-24 flex items-center justify-center rounded-full bg-red-500 text-white text-lg font-semibold">
+                <div className="w-24 h-24 flex items-center justify-center rounded-full bg-red-500 text-white text-lg font-semibold text-center">
                   {categoryItem.label}
                 </div>
               </div>
