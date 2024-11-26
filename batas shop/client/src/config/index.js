@@ -58,7 +58,13 @@ export const addProductFormElements = [
     name: "category",
     componentType: "select",
     options: [
-      { id: "Sweets", label: "Sweets" },
+      { id: "Baklava", label: "Baklava" },
+      { id: "Turkish delight", label: "Turkish delight" },
+      { id: "Coffee", label: "Coffee" },
+      { id: "Oil", label: "Oil" },
+      { id: "Cosmetics", label: "Cosmetics" },
+      { id: "Chocolate", label: "Chocolate" },
+      { id: "Nuts", label: "Nuts" },
       { id: "Teas", label: "Teas" },
       { id: "Spices", label: "Spices" },
       { id: "Honey", label: "Honey" },
@@ -134,7 +140,13 @@ export const shoppingViewHeaderMenuItems = [
 
 
 export const categoryOptionsMap = {
-  Sweets: "Sweets",
+  Baklava: "Baklava",
+  Turkishdelight: "Turkish delight",
+  Coffee: "Coffee",
+  Oil: "Oil",
+  Cosmetics: "Cosmetics",
+  Chocolate: "Chocolate",
+  Nuts: "Nuts",
   Teas: "Teas",
   Spices: "Spices",
   Honey: "Honey",
@@ -144,11 +156,17 @@ export const categoryOptionsMap = {
 
 export const filterOptions = {
   category: [
-    { id: "Sweets", label: "Sweets" },
-    { id: "Teas", label: "Teas" },
-    { id: "Spices", label: "Spices" },
-    { id: "Honey", label: "Honey" },
-    { id: "Perfumes", label: "Perfumes" },
+    { id: "Baklava", label: "Baklava" },
+      { id: "Turkish delight", label: "Turkish delight" },
+      { id: "Coffee", label: "Coffee" },
+      { id: "Oil", label: "Oil" },
+      { id: "Cosmetics", label: "Cosmetics" },
+      { id: "Chocolate", label: "Chocolate" },
+      { id: "Nuts", label: "Nuts" },
+      { id: "Teas", label: "Teas" },
+      { id: "Spices", label: "Spices" },
+      { id: "Honey", label: "Honey" },
+      { id: "Perfumes", label: "Perfumes" },
   ],
 };
 

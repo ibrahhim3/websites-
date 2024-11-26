@@ -7,8 +7,17 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
+import { useNavigate } from "react-router-dom";
+
+
 const categoriesWithIcon = [
-  { id: "Sweets", label: "Sweets" },
+  { id: "Baklava", label: "Baklava" },
+  { id: "Turkish delight", label: "Turkish delight" },
+  { id: "Coffee", label: "Coffee" },
+  { id: "Oil", label: "Oil" },
+  { id: "Cosmetics", label: "Cosmetics" },
+  { id: "Chocolate", label: "Chocolate" },
+  { id: "Nuts", label: "Nuts" },
   { id: "Teas", label: "Teas" },
   { id: "Spices", label: "Spices" },
   { id: "Honey", label: "Honey" },
@@ -19,6 +28,7 @@ function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList } = useSelector((state) => state.shopProducts);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(
@@ -35,6 +45,17 @@ function ShoppingHome() {
 
     return () => clearInterval(timer);
   }, [slides]);
+
+
+  function handleNavigateToListingPage(getCurrentItem, section) {
+    sessionStorage.removeItem("filters");
+    const currentFilter = {
+      [section]: [getCurrentItem.id],
+    };
+    
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    navigate(`/shop/listing`);
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -81,8 +102,9 @@ function ShoppingHome() {
           <div className="flex items-center justify-center gap-36 flex-wrap ">
             {categoriesWithIcon.map((categoryItem) => (
               <div
+              onClick={() => handleNavigateToListingPage(categoryItem, "category")}
                 key={categoryItem.id}
-                className="cursor-pointer  transition-shadow w-24 h-24 flex items-center justify-center"
+                className="cursor-pointer transition-shadow w-24 h-24 flex items-center justify-center"
               >
                 <div className="w-24 h-24 flex items-center justify-center rounded-full bg-red-500 text-white text-lg font-semibold">
                   {categoryItem.label}
