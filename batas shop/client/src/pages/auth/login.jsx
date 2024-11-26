@@ -22,11 +22,19 @@ function AuthLogin() {
       if (data?.payload?.success) {
         toast({
           title: data?.payload?.message,
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
         });
       } else {
         toast({
           title: data?.payload?.message,
           variant: "destructive",
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
         });
       }
     });

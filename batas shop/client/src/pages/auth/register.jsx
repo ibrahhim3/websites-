@@ -24,12 +24,20 @@ function AuthRegister() {
       if (data?.payload?.success) {
         toast({
           title: data?.payload?.message,
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
         });
         navigate("/auth/login");
       }else{
         toast({
           title: data?.payload?.message,
           variant: 'destructive',
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
         });
 
       }

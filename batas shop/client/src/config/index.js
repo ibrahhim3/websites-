@@ -141,7 +141,7 @@ export const shoppingViewHeaderMenuItems = [
 
 export const categoryOptionsMap = {
   Baklava: "Baklava",
-  Turkishdelight: "Turkish delight",
+  "Turkish delight": "Turkish delight",
   Coffee: "Coffee",
   Oil: "Oil",
   Cosmetics: "Cosmetics",
