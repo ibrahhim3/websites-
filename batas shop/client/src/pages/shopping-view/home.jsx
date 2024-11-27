@@ -5,9 +5,15 @@ import bannerThree from "../../assets/banner-3.png";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
+import {
+  fetchAllFilteredProducts,
+  fetchProductDetails,
+} from "@/store/shop/products-slice";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useNavigate } from "react-router-dom";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import { useToast } from "@/hooks/use-toast";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
 
 const categoriesWithIcon = [
   { id: "Baklava", label: "Baklava" },
@@ -25,10 +31,14 @@ const categoriesWithIcon = [
 function ShoppingHome() {
   const slides = [bannerOne, bannerTwo, bannerThree];
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { productList } = useSelector((state) => state.shopProducts);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );  const dispatch = useDispatch();
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     dispatch(
       fetchAllFilteredProducts({
@@ -37,6 +47,7 @@ function ShoppingHome() {
       })
     );
   }, [dispatch]);
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
@@ -44,6 +55,10 @@ function ShoppingHome() {
 
     return () => clearInterval(timer);
   }, [slides]);
+
+  useEffect(() => {
+    if (productDetails !== null) setOpenDetailsDialog(true);
+  }, [productDetails]);
 
   function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
@@ -53,6 +68,31 @@ function ShoppingHome() {
 
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
     navigate(`/shop/listing`);
+  }
+
+  function handleGetProductDetails(getCurrentProductId) {
+    dispatch(fetchProductDetails(getCurrentProductId));
+  }
+
+  function handleAddtoCart(getCurrentProductId) {
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product is added to cart",
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
+        });
+      }
+    });
   }
 
   return (
@@ -104,9 +144,9 @@ function ShoppingHome() {
                   handleNavigateToListingPage(categoryItem, "category")
                 }
                 key={categoryItem.id}
-                className="cursor-pointer transition-shadow w-24 h-24 flex items-center justify-center"
+                className=" hover:scale-110  cursor-pointer transition-shadow w-24 h-24 flex items-center justify-center"
               >
-                <div className="w-24 h-24 flex items-center justify-center rounded-full bg-red-500 text-white text-lg font-semibold text-center">
+                <div className="hover:bg-red-600 w-24 h-24 flex items-center justify-center rounded-full bg-red-500 text-white text-lg font-semibold text-center">
                   {categoryItem.label}
                 </div>
               </div>
@@ -123,12 +163,21 @@ function ShoppingHome() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
               ? productList.map((productItem) => (
-                  <ShoppingProductTile product={productItem} />
+                  <ShoppingProductTile
+                    handleGetProductDetails={handleGetProductDetails}
+                    product={productItem}
+                    handleAddtoCart={handleAddtoCart}
+                  />
                 ))
               : null}
           </div>
         </div>
       </section>
+      <ProductDetailsDialog
+        open={openDetailsDialog}
+        setOpen={setOpenDetailsDialog}
+        productDetails={productDetails}
+      />
     </div>
   );
 }
