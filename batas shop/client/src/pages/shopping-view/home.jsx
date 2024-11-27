@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.png";
-import bannerTwo from "../../assets/banner-2.png";
-import bannerThree from "../../assets/banner-3.png";
+import bannerOne from "../../assets/banner-1.jpg";
+import bannerTwo from "../../assets/banner-2.jpeg";
+import bannerThree from "../../assets/banner-3.jpeg";
+import bannerForth from "../../assets/banner-4.jpeg";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -29,11 +30,12 @@ const categoriesWithIcon = [
   { id: "Perfumes", label: "Perfumes" },
 ];
 function ShoppingHome() {
-  const slides = [bannerOne, bannerTwo, bannerThree];
+  const slides = [bannerOne, bannerTwo, bannerThree, bannerForth];
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
-  );  const dispatch = useDispatch();
+  );
+  const dispatch = useDispatch();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const navigate = useNavigate();
