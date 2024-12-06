@@ -10,20 +10,15 @@ import {
   TableRow,
 } from "../ui/table";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllOrdersByUserId,
-
-
-} from "@/store/shop/order-slice";
-
+import { getAllOrdersByUserId } from "@/store/shop/order-slice";
+import ShoppingOrderDetailsView from "./order-details";
+import { Dialog } from "../ui/dialog";
 
 function ShoppingOrders() {
-  const [ setOpenDetailsDialog] = useState(false);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { orderDetails } = useSelector((state) => state.shopOrder);
-
-  
 
   useEffect(() => {
     dispatch(getAllOrdersByUserId(user?.id));
@@ -60,7 +55,18 @@ function ShoppingOrders() {
               <TableCell>In Process</TableCell>
               <TableCell>$1000</TableCell>
               <TableCell>
-                <Button className='bg-red-600 hover:bg-red-700 hover:text-gray-100 text-white'>View Details</Button>
+                <Dialog
+                  open={openDetailsDialog}
+                  onOpenChange={setOpenDetailsDialog}
+                >
+                  <Button
+                    onClick={() => setOpenDetailsDialog(true)}
+                    className="bg-red-600 hover:bg-red-700 hover:text-gray-100 text-white"
+                  >
+                    View Details
+                  </Button>
+                  <ShoppingOrderDetailsView />
+                </Dialog>
               </TableCell>
             </TableRow>
           </TableBody>
