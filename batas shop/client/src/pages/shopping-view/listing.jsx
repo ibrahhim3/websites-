@@ -24,6 +24,7 @@ import { useSearchParams } from "react-router-dom";
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
 
+
   for (const [key, value] of Object.entries(filterParams)) {
     if (Array.isArray(value) && value.length > 0) {
       const paramValue = value.join(",");
@@ -49,7 +50,6 @@ function ShoppingListing() {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { user } = useSelector((state) => state.auth);
   const { toast } = useToast();
-
 
   const categorySearchParam = searchParams.get("category");
 
