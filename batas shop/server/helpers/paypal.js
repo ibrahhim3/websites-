@@ -1,4 +1,4 @@
-const paypal = require("paypal-rest-sdk");
+/*const paypal = require("paypal-rest-sdk");
 
 paypal.configure({
   mode: "sandbox",
@@ -6,4 +6,4 @@ paypal.configure({
   client_secret: "EPd_v3X46IHTPI9z0Sl-iagLmjnBkCwxGC1nTEd7zgbHCY1cyZJssSgIB-jgS-SpGeIuxLBG4VS_oJ8x",
 });
 
-module.exports = paypal;
+module.exports = paypal;*/
