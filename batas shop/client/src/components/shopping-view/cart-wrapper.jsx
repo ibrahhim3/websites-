@@ -26,7 +26,7 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
       </SheetHeader>
 
       {/* Wrapper with Scroller */}
-      <div className="mt-8 space-y-4 max-h-[50vh] overflow-y-auto">
+      <div className="mt-8 space-y-4 max-h-[65vh] overflow-y-auto">
         {cartItems && cartItems.length > 0
           ? cartItems.map((item) => (
               <UserCartItemsContent key={item.id} cartItem={item} />
