@@ -33,6 +33,8 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'react/jsx-key': 'off', // Disable the jsx-key rule here
+
     },
   },
 ]
