@@ -46,7 +46,7 @@ function UserCartWrapper({ cartItems, setOpenCartSheet }) {
           navigate("/shop/checkout");
           setOpenCartSheet(false);
         }}
-        className="bg-red-600 w-full mt-6"
+        className="bg-red-600 hover:bg-red-700 w-full mt-6"
       >
         Checkout
       </Button>
