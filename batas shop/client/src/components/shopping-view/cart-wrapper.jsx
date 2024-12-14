@@ -3,12 +3,10 @@ import { Button } from "../ui/button";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import UserCartItemsContent from "./cart-items-content";
 
-
-function UserCartWrapper({cartItems,setOpenCartSheet }) {
-
+function UserCartWrapper({ cartItems, setOpenCartSheet }) {
   const navigate = useNavigate();
 
-    const totalCartAmount =
+  const totalCartAmount =
     cartItems && cartItems.length > 0
       ? cartItems.reduce(
           (sum, currentItem) =>
@@ -22,26 +20,39 @@ function UserCartWrapper({cartItems,setOpenCartSheet }) {
       : 0;
 
   return (
-    <SheetContent className=" bg-white sm:max-w-md">
+    <SheetContent className="bg-white sm:max-w-md">
       <SheetHeader>
         <SheetTitle>Your Cart</SheetTitle>
       </SheetHeader>
-      <div className="mt-8 space-y-4"> {cartItems && cartItems.length > 0
-          ? cartItems.map((item) => <UserCartItemsContent cartItem={item} />)
-          : null}</div>
+
+      {/* Wrapper with Scroller */}
+      <div className="mt-8 space-y-4 max-h-[50vh] overflow-y-auto">
+        {cartItems && cartItems.length > 0
+          ? cartItems.map((item) => (
+              <UserCartItemsContent key={item.id} cartItem={item} />
+            ))
+          : <p>Your cart is empty.</p>}
+      </div>
 
       <div className="mt-8 space-y-4">
         <div className="flex justify-between">
           <span className="font-bold">Total</span>
-          <span className="font-bold">${totalCartAmount}</span>
+          <span className="font-bold">${totalCartAmount.toFixed(2)}</span>
         </div>
       </div>
-      <Button  onClick={() => {
+
+      <Button
+        onClick={() => {
           navigate("/shop/checkout");
           setOpenCartSheet(false);
-        }} className=" bg-red-600 w-full mt-6">Checkout</Button>
+        }}
+        className="bg-red-600 w-full mt-6"
+      >
+        Checkout
+      </Button>
     </SheetContent>
   );
 }
 
 export default UserCartWrapper;
+

@@ -159,7 +159,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           <div className="mt-5 mb-5">
             <Button onClick={() =>
                   handleAddToCart(
-                    /*productDetails?._id,*/
+                    productDetails?._id,
                  
                   )
                 } className="w-full bg-red-600 hover:bg-red-700 text-black">
