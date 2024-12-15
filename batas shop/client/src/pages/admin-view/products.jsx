@@ -18,6 +18,7 @@ import {
 } from "@/store/admin/products-slice";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import ConfirmationModal from "@/components/ConfirmationModal"; // Import the modal component
 
 const initialFormData = {
   image: null,
@@ -31,13 +32,14 @@ const initialFormData = {
 };
 
 function AdminProducts() {
-  const [openCreateProductsDialog, setOpenCreateProductsDialog] =
-    useState(false);
+  const [openCreateProductsDialog, setOpenCreateProductsDialog] = useState(false);
   const [formData, setFormData] = useState(initialFormData);
   const [imageFile, setImageFile] = useState(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [imageLoadingState, setImageLoadingState] = useState(false);
   const [currentEditedId, setCurrentEditedId] = useState(null);
+  const [openConfirmationModal, setOpenConfirmationModal] = useState(false);
+  const [productIdToDelete, setProductIdToDelete] = useState(null);
 
   const { productList } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
@@ -53,8 +55,6 @@ function AdminProducts() {
             formData,
           })
         ).then((data) => {
-          console.log(data, "edit");
-
           if (data?.payload?.success) {
             dispatch(fetchAllProducts());
             setFormData(initialFormData);
@@ -74,7 +74,7 @@ function AdminProducts() {
             setImageFile(null);
             setFormData(initialFormData);
             toast({
-              title: "Product add successfully",
+              title: "Product added successfully",
               style: {
                 backgroundColor: "white",
                 color: "black",
@@ -84,32 +84,35 @@ function AdminProducts() {
         });
   }
 
-  function handleDelete(getCurrentProductId) {
-    dispatch(deleteProduct(getCurrentProductId)).then((data) => {
-      if (data?.payload?.success) {
-        dispatch(fetchAllProducts());
-      }
-    });
+  function handleDelete(productId) {
+    setProductIdToDelete(productId);
+    setOpenConfirmationModal(true); // Show the confirmation modal
   }
 
- /* function isFormValid() {
-    return Object.keys(formData)
-      .filter((currentKey) => currentKey !== "averageReview")
-      .map((key) => formData[key] !== "")
-      .every((item) => item);
-  }*/
+  function confirmDelete() {
+    if (productIdToDelete) {
+      dispatch(deleteProduct(productIdToDelete)).then((data) => {
+        if (data?.payload?.success) {
+          dispatch(fetchAllProducts());
+        }
+      });
+    }
+    setOpenConfirmationModal(false); // Close the modal after deletion
+  }
+
+  function cancelDelete() {
+    setOpenConfirmationModal(false); // Close the modal without deletion
+  }
 
   useEffect(() => {
     dispatch(fetchAllProducts());
   }, [dispatch]);
 
-  console.log(formData, "productList");
-
   return (
     <Fragment>
       <div className="mb-5 w-full flex justify-end">
         <Button
-          className=" bg-black text-white"
+          className="bg-black text-white"
           onClick={() => setOpenCreateProductsDialog(true)}
         >
           Add New Product
@@ -129,6 +132,14 @@ function AdminProducts() {
             ))
           : null}
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={openConfirmationModal}
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        message="Are you sure you want to delete this product?"
+      />
 
       <Sheet
         open={openCreateProductsDialog}
