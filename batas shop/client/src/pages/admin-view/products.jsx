@@ -75,6 +75,10 @@ function AdminProducts() {
             setFormData(initialFormData);
             toast({
               title: "Product add successfully",
+              style: {
+                backgroundColor: "white",
+                color: "black",
+              },
             });
           }
         });

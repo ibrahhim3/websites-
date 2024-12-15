@@ -79,6 +79,10 @@ function SearchProducts() {
         dispatch(fetchCartItems(user?.id));
         toast({
           title: "Product added to cart",
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
         });
       }
     });
