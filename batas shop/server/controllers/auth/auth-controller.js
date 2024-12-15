@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
-const sendEmail = require('../../helpers/mailer');
+
 
 
 
@@ -20,15 +20,6 @@ const registerUser = async(req, res) => {
         });
 
         const hashPassword = await bcrypt.hash(password, 12);
-        
-        const activationToken = jwt.sign(
-          { email },
-          "ACTIVATION_SECRET_KEY", // Use a secure environment variable in production
-          { expiresIn: "1h" } // Token expires in 1 hour
-        );
-
-
-
         const newUser = new User({
             userName, 
             email , 
@@ -36,19 +27,9 @@ const registerUser = async(req, res) => {
         });
 
         await newUser.save()
-
-        const activationLink = `http://localhost:5000/api/auth/activate/${activationToken}`;
-        await sendEmail(
-          email,
-          "Activate Your Account",
-          `<h2>Welcome ${userName}!</h2>
-          <p>Please click <a href="${activationLink}">here</a> to activate your account.</p>`
-        );
-
-
         res.status(200).json({
             success : true,
-            message : "Registration successful, check your email for activation",
+            message : "Registration successful ",
         });
     }catch(e){
         console.log(e);
@@ -71,13 +52,6 @@ const loginUser = async (req, res) => {
           success: false,
           message: "User doesn't exists! Please register first",
         });
-
-
-        if (!checkUser.isActive)
-          return res.status(403).json({
-            success: false,
-            message: "Account not activated! Please check your email to activate your account.",
-          });
   
       const checkPasswordMatch = await bcrypt.compare(
         password,
@@ -155,52 +129,7 @@ const authMiddleware = async (req, res, next) => {
 };
 
 
-
-
-// Activate User Account
-const activateAccount = async (req, res) => {
-  const { token } = req.params;
-
-  try {
-    // Verify the token
-    const decoded = jwt.verify(token, "ACTIVATION_SECRET_KEY");
-    const { email } = decoded;
-
-    // Find the user by email
-    const user = await User.findOne({ email });
-    if (!user)
-      return res.status(404).json({
-        success: false,
-        message: "User not found!",
-      });
-
-    if (user.isActive) {
-      return res.status(400).json({
-        success: false,
-        message: "Account is already activated!",
-      });
-    }
-
-    // Activate the account
-    user.isActive = true;
-    await user.save();
-
-    res.status(200).json({
-      success: true,
-      message: "Account activated successfully! You can now log in.",
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      success: false,
-      message: "Invalid or expired activation link.",
-    });
-  }
-};
-
-
-
-module.exports = {registerUser, loginUser, logoutUser, authMiddleware, activateAccount };
+module.exports = {registerUser, loginUser, logoutUser, authMiddleware };
 
 
 

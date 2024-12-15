@@ -20,10 +20,6 @@ const UserSchema = mongoose.Schema( {
             type: String,
             default: 'user',
         },
-        isActive: {
-            type: Boolean,
-            default: false, // User is inactive until they activate their account
-        },
     });
 
 
