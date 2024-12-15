@@ -40,6 +40,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
             backgroundColor: "red",
             color: "white",
           },
+          duration: 3000,
       });
 
       return;
@@ -63,6 +64,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
                 backgroundColor: "white",
                 color: "black",
               },
+              duration: 3000,
             });
           }
         })
@@ -81,6 +83,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
                 backgroundColor: "white",
                 color: "black",
               },
+              duration: 3000,
             });
           }
         });
@@ -98,6 +101,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
             backgroundColor: "white",
             color: "black",
           },
+          duration: 3000,
         });
       }
     });

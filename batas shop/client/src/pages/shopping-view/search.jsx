@@ -83,6 +83,7 @@ function SearchProducts() {
             backgroundColor: "white",
             color: "black",
           },
+          duration: 3000,
         });
       }
     });

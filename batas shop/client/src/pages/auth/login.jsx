@@ -26,6 +26,7 @@ function AuthLogin() {
             backgroundColor: "white",
             color: "black",
           },
+          duration: 3000,
         });
       } else {
         toast({
@@ -35,6 +36,7 @@ function AuthLogin() {
             backgroundColor: "white",
             color: "black",
           },
+          duration: 3000,
         });
       }
     });

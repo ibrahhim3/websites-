@@ -90,6 +90,7 @@ function ShoppingHome() {
             backgroundColor: "white",
             color: "black",
           },
+          duration: 3000,
         });
       }
     });

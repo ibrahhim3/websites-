@@ -28,6 +28,7 @@ function AuthRegister() {
             backgroundColor: "white",
             color: "black",
           },
+          duration: 3000,
         });
         navigate("/auth/login");
       }else{
@@ -38,6 +39,7 @@ function AuthRegister() {
             backgroundColor: "white",
             color: "black",
           },
+          duration: 3000,
         });
 
       }

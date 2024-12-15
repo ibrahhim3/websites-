@@ -43,7 +43,13 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
         dispatch(getReviews(productDetails?._id));
         toast({
           title: "Review added successfully!",
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
+           duration: 3000,
         });
+        
       }
     });
   }
@@ -84,6 +90,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             backgroundColor: "white",
             color: "black",
           },
+          duration: 3000,
         });
       }
     });
