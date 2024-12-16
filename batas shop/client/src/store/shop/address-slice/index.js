@@ -10,7 +10,7 @@ export const addNewAddress = createAsyncThunk(
   "/addresses/addNewAddress",
   async (formData) => {
     const response = await axios.post(
-      "http://spicebatas.com/api/shop/address/add",
+      "http://localhost:5000/api/shop/address/add",
       formData
     );
 
@@ -22,7 +22,7 @@ export const fetchAllAddresses = createAsyncThunk(
   "/addresses/fetchAllAddresses",
   async (userId) => {
     const response = await axios.get(
-      `http://spicebatas.com/api/shop/address/get/${userId}`
+      `http://localhost:5000/api/shop/address/get/${userId}`
     );
 
     return response.data;
@@ -33,7 +33,7 @@ export const editaAddress = createAsyncThunk(
   "/addresses/editaAddress",
   async ({ userId, addressId, formData }) => {
     const response = await axios.put(
-      `http://spicebatas.com/api/shop/address/update/${userId}/${addressId}`,
+      `http://localhost:5000/api/shop/address/update/${userId}/${addressId}`,
       formData
     );
 
@@ -45,7 +45,7 @@ export const deleteAddress = createAsyncThunk(
   "/addresses/deleteAddress",
   async ({ userId, addressId }) => {
     const response = await axios.delete(
-      `http://spicebatas.com/api/shop/address/delete/${userId}/${addressId}`
+      `http://localhost:5000/api/shop/address/delete/${userId}/${addressId}`
     );
 
     return response.data;
@@ -63,6 +63,7 @@ const addressSlice = createSlice({
       })
       .addCase(addNewAddress.fulfilled, (state, action) => {
         state.isLoading = false;
+
       })
       .addCase(addNewAddress.rejected, (state) => {
         state.isLoading = false;

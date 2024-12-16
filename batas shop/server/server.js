@@ -35,7 +35,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
     cors({
-        origin : 'http://spicebatas.com',
+        origin : 'http://localhost:5173',
         methods : ['GET', 'POST', 'DELETE', 'PUT'],
         allowedHeaders : [
             "Content-type",
