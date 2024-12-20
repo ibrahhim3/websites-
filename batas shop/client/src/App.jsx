@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 import AuthLayout from "./components/auth/layout";
 import AuthLogin from "./pages/auth/login";
 import AuthRegister from "./pages/auth/register";
@@ -20,6 +20,7 @@ import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "@/components/ui/skeleton";
 import SearchProducts from "./pages/shopping-view/search";
 import AdminDashboard from "./pages/admin-view/dashboard";
+import ShoppingHomeunsigned from "./pages/shopping-view/unsigned";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -38,13 +39,15 @@ function App() {
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
+        {/* Redirect to ShoppingHomeunsigned if not authenticated, otherwise ShoppingHome */}
         <Route
           path="/"
           element={
-            <CheckAuth
-              isAuthenticated={isAuthenticated}
-              user={user}
-            ></CheckAuth>
+            isAuthenticated ? (
+              <Navigate to="/shop/home" />
+            ) : (
+              <ShoppingHomeunsigned />
+            )
           }
         />
         <Route
@@ -91,4 +94,5 @@ function App() {
     </div>
   );
 }
+
 export default App;
