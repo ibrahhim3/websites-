@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
-import { Link, useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchAllFilteredProducts,
@@ -13,20 +18,16 @@ import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu, ShoppingCart } from "lucide-react";
+import { Menu} from "lucide-react";
 import { Label } from "@radix-ui/react-label";
 import { shoppingViewHeaderMenuItems } from "@/config";
-import UserCartWrapper from "@/components/shopping-view/cart-wrapper";
-
 
 /////////
-
-
 
 function MenuItems() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [ setSearchParams] = useSearchParams();
+  const [setSearchParams] = useSearchParams();
 
   function handleNavigate(getCurrentMenuItem) {
     sessionStorage.removeItem("filters");
@@ -63,54 +64,43 @@ function MenuItems() {
   );
 }
 
+// function HeaderRightContent() {
+//   const { user } = useSelector((state) => state.auth);
+//   const { cartItems } = useSelector((state) => state.shopCart);
+//   const [openCartSheet, setOpenCartSheet] = useState(false);
 
-function HeaderRightContent() {
-    const { user } = useSelector((state) => state.auth);
-    const { cartItems } = useSelector((state) => state.shopCart);
-    const [openCartSheet, setOpenCartSheet] = useState(false);
+//   const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
-  
-   
-    useEffect(() => {
-      dispatch(fetchCartItems(user?.id));
-    }, [dispatch]);
-  
-    console.log(cartItems, "sangam");
-  
-    return (
-      <div className="flex lg:items-center lg:flex-row flex-col gap-4">
-        <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
-          <Button
-            onClick={() => setOpenCartSheet(true)}
-            variant="outline"
-            size="icon"
-            className="relative"
-          >
-            <ShoppingCart className="w-6 h-6" />
-            <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
-              {cartItems?.items?.length || 0}
-            </span>
-            <span className="sr-only">User cart</span>
-          </Button>
-          <UserCartWrapper
-            setOpenCartSheet={setOpenCartSheet}
-            cartItems={
-              cartItems && cartItems.items && cartItems.items.length > 0
-                ? cartItems.items
-                : []
-            }
-          />
-        </Sheet>
-  
-        
-      </div>
-    );
-  }
+//   useEffect(() => {
+//     dispatch(fetchCartItems(user?.id));
+//   }, [dispatch]);
 
+//   return (
+//     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
+//       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+//         {/* Cart Button */}
+//         <Button
+//           onClick={() => setOpenCartSheet(true)}
+//           variant="outline"
+//           size="icon"
+//           className="relative flex items-center gap-2 bg-gray-200 hover:bg-gray-300 transition-all duration-200 rounded-lg p-2"
+//         >
+//           <ShoppingCart className="w-6 h-6 text-gray-700" />
+//           <span className="absolute top-[-5px] right-[-5px] text-xs font-bold text-white bg-red-600 rounded-full w-5 h-5 flex items-center justify-center">
+//             {cartItems?.items?.length || 0}
+//           </span>
+//           <span className="sr-only">User cart</span>
+//         </Button>
 
-
-
+//         {/* Cart Modal (Sheet) */}
+//         <UserCartWrapper
+//           setOpenCartSheet={setOpenCartSheet}
+//           cartItems={cartItems?.items || []}
+//         />
+//       </Sheet>
+//     </div>
+//   );
+// }
 
 function ShoppingHomeunsigned() {
   const { featureImageList } = useSelector((state) => state.commonFeature);
@@ -186,43 +176,63 @@ function ShoppingHomeunsigned() {
     <div className="flex flex-col min-h-screen">
       {/* Header */}
       <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="flex h-16 items-center justify-between px-4 md:px-6">
-        <Link to="/shop/home" className="flex items-center gap-3">
-          <img
-            src="/images/logo.png" // Path to the logo in the public folder
-            alt="BATAŞ Logo"
-            className="h-16 w-16 rounded-full object-cover bg-black" // Bigger size and circular shape
-          />
+  <div className="flex h-16 items-center justify-between px-4 md:px-6 relative">
+    <Link to="/shop/home" className="flex items-center gap-3">
+      <img
+        src="/images/logo.png" // Path to the logo in the public folder
+        alt="BATAŞ Logo"
+        className="h-16 w-16 rounded-full object-cover bg-black" // Bigger size and circular shape
+      />
 
-          <span className="flex flex-col items-center text-red-600">
-            <span className="text-4xl  font-bold">BATAŞ</span>
-            <span className="text-lg font-medium ">spice shop</span>
-          </span>
-        </Link>
-       
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
-              <Menu className="h-6 w-6" />
-              <span className="sr-only">Toggle header menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="w-full max-w-xs bg-white text-black transition-all duration-300"
-          >
-            <MenuItems />
-            <HeaderRightContent />
-          </SheetContent>
-        </Sheet>
-        <div className="hidden lg:block">
-          <MenuItems />
-        </div>
-        <div className="hidden lg:block">
-          <HeaderRightContent />
-        </div>
-      </div>
-    </header>
+      <span className="flex flex-col items-center text-red-600">
+        <span className="text-4xl font-bold">BATAŞ</span>
+        <span className="text-lg font-medium">spice shop</span>
+      </span>
+    </Link>
+
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline" size="icon" className="lg:hidden">
+          <Menu className="h-6 w-6" />
+          <span className="sr-only">Toggle header menu</span>
+        </Button>
+      </SheetTrigger>
+      <SheetContent
+        side="left"
+        className="w-full max-w-xs bg-white text-black transition-all duration-300"
+      >
+        <MenuItems />
+
+      </SheetContent>
+    </Sheet>
+
+
+
+
+    <div className="hidden lg:block flex gap-4">
+  <Button
+    variant="outline"
+    onClick={() => navigate("/auth/login")}
+    className="text-red-600 border-2 border-red-600 rounded-lg px-6 py-2 font-semibold uppercase tracking-wide transition-all duration-300 hover:bg-red-600 hover:text-white"
+  >
+    Sign In
+  </Button>
+  <Button
+    variant="outline"
+    onClick={() => navigate("/auth/register")}
+    className="text-red-600 border-2 border-red-600 rounded-lg px-6 py-2 font-semibold uppercase tracking-wide transition-all duration-300 hover:bg-red-600 hover:text-white"
+  >
+    Sign Up
+  </Button>
+</div>
+
+
+
+
+
+
+  </div>
+</header>
 
       <div className="relative w-full h-[400px] overflow-hidden">
         {/* Image slider */}
@@ -237,25 +247,7 @@ function ShoppingHomeunsigned() {
               />
             ))
           : null}
-
-        {/* Buttons for Sign In and Sign Up */}
-        <div className="absolute top-4 right-4 flex gap-4">
-          <Button
-            variant="outline"
-            onClick={() => navigate("/auth/login")}
-            className="bg-white text-black"
-          >
-            Sign In
-          </Button>
-          <Button
-            variant="outline"
-            onClick={() => navigate("/auth/register")}
-            className="bg-white text-black"
-          >
-            Sign Up
-          </Button>
-        </div>
-
+    
         {/* Slide navigation buttons */}
         <Button
           variant="outline"
@@ -263,17 +255,22 @@ function ShoppingHomeunsigned() {
           className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80"
           onClick={() =>
             setCurrentSlide(
-              (prevSlide) => (prevSlide - 1 + featureImageList.length) % featureImageList.length
+              (prevSlide) =>
+                (prevSlide - 1 + featureImageList.length) %
+                featureImageList.length
             )
           }
         >
           <ChevronLeftIcon className="w-4 h-4" />
         </Button>
+
         <Button
           variant="outline"
           size="icon"
           onClick={() =>
-            setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length)
+            setCurrentSlide(
+              (prevSlide) => (prevSlide + 1) % featureImageList.length
+            )
           }
           className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80"
         >
@@ -282,20 +279,25 @@ function ShoppingHomeunsigned() {
       </div>
 
       {/* Featured Products Section */}
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {productList && productList.length > 0
-              ? productList.map((productItem) => (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {productList && productList.length > 0 ? (
+              productList.map((productItem) => (
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                   <ShoppingProductTile
                     key={productItem.id} // Ensure unique key for each product
                     handleGetProductDetails={handleGetProductDetails}
                     product={productItem}
                     handleAddtoCart={handleAddtoCart}
                   />
-                ))
-              : null}
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 col-span-4">
+                No products available.
+              </p>
+            )}
           </div>
         </div>
       </section>

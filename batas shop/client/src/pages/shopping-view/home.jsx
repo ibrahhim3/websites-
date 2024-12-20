@@ -161,21 +161,25 @@ function ShoppingHome() {
         </div>
       </section>
 
-      <section className="py-12">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            Feature Products
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {productList && productList.length > 0
-              ? productList.map((productItem) => (
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            {productList && productList.length > 0 ? (
+              productList.map((productItem) => (
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
                   <ShoppingProductTile
+                    key={productItem.id} // Ensure unique key for each product
                     handleGetProductDetails={handleGetProductDetails}
                     product={productItem}
                     handleAddtoCart={handleAddtoCart}
                   />
-                ))
-              : null}
+                </div>
+              ))
+            ) : (
+              <p className="text-center text-gray-500 col-span-4">
+                No products available.
+              </p>
+            )}
           </div>
         </div>
       </section>

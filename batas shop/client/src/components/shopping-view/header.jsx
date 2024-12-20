@@ -27,7 +27,7 @@ import { Label } from "../ui/label";
 function MenuItems() {
   const navigate = useNavigate();
   const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [setSearchParams] = useSearchParams();
 
   function handleNavigate(getCurrentMenuItem) {
     sessionStorage.removeItem("filters");
@@ -79,57 +79,56 @@ function HeaderRightContent() {
     dispatch(fetchCartItems(user?.id));
   }, [dispatch]);
 
-  console.log(cartItems, "sangam");
-
   return (
     <div className="flex lg:items-center lg:flex-row flex-col gap-4">
+      {/* Cart Button */}
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
         <Button
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
           size="icon"
-          className="relative"
+          className="relative flex items-center gap-2 bg-gray-200 hover:bg-gray-300 transition-all duration-200 rounded-lg p-2"
         >
-          <ShoppingCart className="w-6 h-6" />
-          <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
+          <ShoppingCart className="w-6 h-6 text-gray-700" />
+          <span className="absolute top-[-5px] right-[-5px] text-xs font-bold text-white bg-red-600 rounded-full w-5 h-5 flex items-center justify-center">
             {cartItems?.items?.length || 0}
           </span>
           <span className="sr-only">User cart</span>
         </Button>
+
         <UserCartWrapper
           setOpenCartSheet={setOpenCartSheet}
-          cartItems={
-            cartItems && cartItems.items && cartItems.items.length > 0
-              ? cartItems.items
-              : []
-          }
+          cartItems={cartItems?.items || []}
         />
       </Sheet>
 
+      {/* User Avatar Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black">
-            <AvatarFallback className="bg-black text-white font-extrabold cursor-pointer ">
+            <AvatarFallback className="bg-black text-white font-extrabold cursor-pointer">
               {user?.userName[0].toUpperCase()}
             </AvatarFallback>
           </Avatar>
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="right" className="bg-white w-56 ">
-          <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
+        <DropdownMenuContent side="right" className="bg-white w-56 rounded-lg shadow-lg">
+          <DropdownMenuLabel className="font-medium text-gray-800">
+            Logged in as {user?.userName}
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="hover:bg-gray-200 cursor-pointer"
+            className="hover:bg-gray-200 cursor-pointer px-4 py-2 rounded-md flex items-center"
             onClick={() => navigate("/shop/account")}
           >
-            <UserCog className="mr-2 h-4 w-4" />
+            <UserCog className="mr-2 h-4 w-4 text-gray-700" />
             Account
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
-            className="hover:bg-gray-200 cursor-pointer"
+            className="hover:bg-gray-200 cursor-pointer px-4 py-2 rounded-md flex items-center"
             onClick={handleLogout}
           >
-            <LogOut className="mr-2 h-4 w-4" />
+            <LogOut className="mr-2 h-4 w-4 text-gray-700" />
             Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
@@ -137,6 +136,17 @@ function HeaderRightContent() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
 
 function ShoppingHeader() {
   const { isAuthenticated } = useSelector((state) => state.auth);
