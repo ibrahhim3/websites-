@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
 
+
 const categoriesWithIcon = [
   { id: "Baklava", label: "Baklava" },
   { id: "Turkish delight", label: "Turkish delight" },
@@ -162,27 +163,76 @@ function ShoppingHome() {
       </section>
 
       <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {productList && productList.length > 0 ? (
-              productList.map((productItem) => (
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+  <div className="container mx-auto px-6">
+    {productList && productList.length > 0 ? (
+      // Group products by category
+      Object.entries(
+        productList.reduce((acc, product) => {
+          const category = product.category || "Uncategorized"; // Default category
+          if (!acc[category]) acc[category] = [];
+          acc[category].push(product);
+          return acc;
+        }, {})
+      ).map(([category, products]) => (
+        <div key={category} className="mb-12">
+          {/* Category Title */}
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            {category}
+          </h2>
+
+          {/* Auto-Moving Row */}
+          <div className="relative overflow-hidden group">
+            <div
+              className="flex gap-6 animate-scroll"
+              style={{
+                animationDuration: `${products.length * 6}s`, // Increased duration for slower scroll
+              }}
+            >
+              {products.concat(products).map((productItem, index) => (
+                <div
+                  key={`${productItem.id}-${index}`}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]" // Ensure consistent width for items
+                >
                   <ShoppingProductTile
-                    key={productItem.id} // Ensure unique key for each product
                     handleGetProductDetails={handleGetProductDetails}
                     product={productItem}
                     handleAddtoCart={handleAddtoCart}
                   />
                 </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500 col-span-4">
-                No products available.
-              </p>
-            )}
+              ))}
+            </div>
+
+            {/* Left Arrow */}
+            <button
+              className="absolute top-1/2 left-4 transform -translate-y-1/2 text-blue-600 bg-white p-2 rounded-full shadow-md hidden group-hover:block"
+            >
+              &lt;
+            </button>
+
+            {/* Right Arrow */}
+            <button
+              className="absolute top-1/2 right-4 transform -translate-y-1/2 text-blue-600 bg-white p-2 rounded-full shadow-md hidden group-hover:block"
+            >
+              &gt;
+            </button>
           </div>
         </div>
-      </section>
+      ))
+    ) : (
+      <p className="text-center text-gray-500">No products available.</p>
+    )}
+  </div>
+</section>
+
+
+
+
+
+
+
+
+
+      
       <ProductDetailsDialog
         open={openDetailsDialog}
         setOpen={setOpenDetailsDialog}

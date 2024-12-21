@@ -279,28 +279,66 @@ function ShoppingHomeunsigned() {
       </div>
 
       {/* Featured Products Section */}
+
+
+
+
+
+
+
       <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-            {productList && productList.length > 0 ? (
-              productList.map((productItem) => (
-                <div className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+  <div className="container mx-auto px-6">
+    {productList && productList.length > 0 ? (
+      // Group products by category
+      Object.entries(
+        productList.reduce((acc, product) => {
+          const category = product.category || "Uncategorized"; // Default category
+          if (!acc[category]) acc[category] = [];
+          acc[category].push(product);
+          return acc;
+        }, {})
+      ).map(([category, products]) => (
+        <div key={category} className="mb-12">
+          {/* Category Title */}
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            {category}
+          </h2>
+          {/* Auto-Moving Row */}
+          <div className="relative overflow-hidden">
+            <div
+              className="flex gap-6 animate-scroll"
+              style={{
+                animationDuration: `${products.length * 6}s`, // Increased duration for slower scroll
+              }}
+            >
+              {products.concat(products).map((productItem, index) => (
+                <div
+                  key={`${productItem.id}-${index}`}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]" // Ensure consistent width for items
+                >
                   <ShoppingProductTile
-                    key={productItem.id} // Ensure unique key for each product
                     handleGetProductDetails={handleGetProductDetails}
                     product={productItem}
                     handleAddtoCart={handleAddtoCart}
                   />
                 </div>
-              ))
-            ) : (
-              <p className="text-center text-gray-500 col-span-4">
-                No products available.
-              </p>
-            )}
+              ))}
+            </div>
           </div>
         </div>
-      </section>
+      ))
+    ) : (
+      <p className="text-center text-gray-500">No products available.</p>
+    )}
+  </div>
+</section>
+
+
+
+
+
+
+
 
       {/* Product Details Dialog */}
       <ProductDetailsDialog

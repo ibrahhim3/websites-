@@ -2,3 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%); /* Move the row by 50% */
+  }
+}
+
+.animate-scroll {
+  display: flex;
+  animation: scroll linear infinite;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Custom responsive design */
+@media (max-width: 768px) {
+  .custom-min-width {
+    min-width: 200px; /* For small screens */
+  }
+  .custom-text-size {
+    font-size: 1.25rem; /* Custom font size for small screens */
+  }
+}
