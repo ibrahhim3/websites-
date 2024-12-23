@@ -92,6 +92,7 @@ export const addProductFormElements = [
     type: "number",
     placeholder: "Enter total stock",
   },
+  
 ];
 
 export const shoppingViewHeaderMenuItems = [
@@ -106,28 +107,13 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/listing",
   },
   {
-    id: "Sweets",
-    label: "Sweets",
+    id: "BEST",
+    label: "Best Seller",
     path: "/shop/listing",
   },
   {
-    id: "Teas",
-    label: "Teas",
-    path: "/shop/listing",
-  },
-  {
-    id: "Spices",
-    label: "Spices",
-    path: "/shop/listing",
-  },
-  {
-    id: "Honey",
-    label: "Honey",
-    path: "/shop/listing",
-  },
-  {
-    id: "Perfumes",
-    label: "Perfumes",
+    id: "sales",
+    label: "Discounted Products",
     path: "/shop/listing",
   },
   {
@@ -167,6 +153,7 @@ export const filterOptions = {
       { id: "Spices", label: "Spices" },
       { id: "Honey", label: "Honey" },
       { id: "Perfumes", label: "Perfumes" },
+
   ],
 };
 

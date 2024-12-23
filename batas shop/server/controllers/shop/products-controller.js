@@ -1,19 +1,20 @@
 const Product = require("../../models/Product");
-
 const getFilteredProducts = async (req, res) => {
   try {
-
-    const {category = [], sortBy = "price-lowtohigh"} = req.query;
+    const { category = [], sortBy = "price-lowtohigh" } = req.query;
 
     let filters = {};
 
-    if(category.length){
-      filters.category = {$in: category.split(',')}
+    if (category.length) {
+      // Check if the category is sales, and filter based on salePrice
+      if (category.includes("sales")) {
+        filters.salePrice = { $gt: 0 }; // Only products with salePrice > 0
+      } else {
+        filters.category = { $in: category.split(",") };
+      }
     }
 
-
     let sort = {};
-
     switch (sortBy) {
       case "price-lowtohigh":
         sort.price = 1;
@@ -39,10 +40,10 @@ const getFilteredProducts = async (req, res) => {
       data: products,
     });
   } catch (e) {
-    console.log(error);
+    console.log(e);
     res.status(500).json({
       success: false,
-      message: "Some error occured",
+      message: "Some error occurred",
     });
   }
 };
