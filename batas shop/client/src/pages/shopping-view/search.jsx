@@ -28,7 +28,7 @@ function useDebounce(value, delay) {
 function SearchProducts() {
   const [keyword, setKeyword] = useState("");
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
-  const [ setSearchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useDispatch();
 
   const { searchResults } = useSelector((state) => state.shopSearch);
@@ -99,25 +99,21 @@ function SearchProducts() {
 
   return (
     <div className="container mx-auto md:px-6 px-4 py-8">
-      {/* Search Bar */}
-      <div className="flex justify-center mb-12">
-        <div className="relative w-full max-w-3xl">
+      <div className="flex justify-center mb-8">
+        <div className="w-full flex items-center">
           <Input
             value={keyword}
             name="keyword"
             onChange={(event) => setKeyword(event.target.value)}
-            className="py-4 px-6 rounded-lg border-2 border-gray-300 focus:ring-2 focus:ring-blue-600 focus:border-blue-600 w-full"
+            className="py-6"
             placeholder="Search Products..."
           />
         </div>
       </div>
-  
-      {/* No results found message */}
       {!searchResults?.length ? (
-        <p className="font-extrabold text-center text-gray-300 text-3xl">No results found!</p>
+        <h1 className="text-5xl font-extrabold text-center">No results found!</h1>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {/* Displaying Product Tiles */}
           {searchResults.map((item) => (
             <ShoppingProductTile
               key={item.id} // Ensure unique key
@@ -128,8 +124,6 @@ function SearchProducts() {
           ))}
         </div>
       )}
-  
-      {/* Product Details Dialog */}
       <ProductDetailsDialog
         open={openDetailsDialog}
         setOpen={setOpenDetailsDialog}
@@ -137,8 +131,6 @@ function SearchProducts() {
       />
     </div>
   );
-  
-  
 }
 
 export default SearchProducts;
