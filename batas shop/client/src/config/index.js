@@ -107,7 +107,7 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/listing",
   },
   {
-    id: "best",
+    id: "BEST",
     label: "Best Seller",
     path: "/shop/listing",
   },

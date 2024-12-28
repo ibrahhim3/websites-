@@ -20,18 +20,6 @@ const UserSchema = mongoose.Schema( {
             type: String,
             default: 'user',
         },
-        isActive: { // New field to track account activation
-            type: Boolean,
-            default: false,
-          },
-        verificationCode: {
-            type: String,
-            default: null,
-          },
-        verificationCodeExpires: {
-            type: Date,
-            default: null,
-          },
     });
 
 
