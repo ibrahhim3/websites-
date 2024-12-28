@@ -13,7 +13,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     const response = await axios.post(
-      "http://localhost:5173/api/shop/order/create", // Your Iyzico `createOrder` endpoint
+      `${import.meta.env.VITE_API_URL}/api/shop/order/create`, // Your Iyzico `createOrder` endpoint
       orderData
     );
 
@@ -25,7 +25,7 @@ export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
   async ({ token, orderId }) => {
     const response = await axios.post(
-      "http://localhost:5173/api/shop/order/capture", // Your Iyzico `capturePayment` endpoint
+      `${import.meta.env.VITE_API_URL}/api/shop/order/capture`, // Your Iyzico `capturePayment` endpoint
       {
         token, // Payment token returned by Iyzico
         orderId,
@@ -40,7 +40,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId",
   async (userId) => {
     const response = await axios.get(
-      `http://localhost:5173/api/shop/order/list/${userId}`
+      `${import.meta.env.VITE_API_URL}/api/shop/order/list/${userId}`
     );
 
     return response.data;
@@ -51,7 +51,7 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `http://localhost:5173/api/shop/order/details/${id}`
+      `${import.meta.env.VITE_API_URL}/api/shop/order/details/${id}`
     );
 
     return response.data;
