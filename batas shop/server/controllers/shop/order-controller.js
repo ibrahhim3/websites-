@@ -1,4 +1,4 @@
-//const paypal = require("../../helpers/paypal");
+const { initializePayment } = require("../../helpers/paymentService");
 const Order = require("../../models/Order");
 const Cart = require("../../models/Cart");
 const Product = require("../../models/Product");
@@ -15,116 +15,139 @@ const createOrder = async (req, res) => {
       totalAmount,
       orderDate,
       orderUpdateDate,
-      paymentId,
-      payerId,
       cartId,
     } = req.body;
 
-    const create_payment_json = {
-      intent: "sale",
-      payer: {
-        payment_method: "paypal",
+    const paymentData = {
+      locale: "tr", // Locale: "tr" for Turkish, "en" for English
+      conversationId: "123456789",
+      price: totalAmount.toFixed(2), // Raw price of items
+      paidPrice: totalAmount.toFixed(2), // Final price (with fees, etc.)
+      currency: "TRY", // Replace with your currency
+      installment: 1, // Single installment
+      basketId: "B67832",
+      paymentChannel: "WEB",
+      paymentGroup: "PRODUCT",
+      paymentCard: {
+        cardHolderName: req.body.cardHolderName,
+        cardNumber: req.body.cardNumber,
+        expireMonth: req.body.expireMonth,
+        expireYear: req.body.expireYear,
+        cvc: req.body.cvc,
+        registerCard: 0,
       },
-      redirect_urls: {
-        return_url: `${process.env.CLIENT_BASE_URL}/shop/paypal-return`,
-        cancel_url: `${process.env.CLIENT_BASE_URL}/shop/paypal-cancel`,
+      buyer: {
+        id: userId,
+        name: addressInfo.fullName,
+        surname: addressInfo.lastName || "Unknown",
+        gsmNumber: addressInfo.phoneNumber,
+        email: addressInfo.email,
+        identityNumber: "12345678901", // Use a valid identity number for Turkish users
+        registrationAddress: addressInfo.address,
+        ip: req.ip,
+        city: addressInfo.city,
+        country: addressInfo.country || "Turkey",
+        zipCode: addressInfo.zipCode,
       },
-      transactions: [
-        {
-          item_list: {
-            items: cartItems.map((item) => ({
-              name: item.title,
-              sku: item.productId,
-              price: item.price.toFixed(2),
-              currency: "USD",
-              quantity: item.quantity,
-            })),
-          },
-          amount: {
-            currency: "USD",
-            total: totalAmount.toFixed(2),
-          },
-          description: "description",
-        },
-      ],
+      shippingAddress: {
+        contactName: addressInfo.fullName,
+        city: addressInfo.city,
+        country: addressInfo.country || "Turkey",
+        address: addressInfo.address,
+        zipCode: addressInfo.zipCode,
+      },
+      billingAddress: {
+        contactName: addressInfo.fullName,
+        city: addressInfo.city,
+        country: addressInfo.country || "Turkey",
+        address: addressInfo.address,
+        zipCode: addressInfo.zipCode,
+      },
+      basketItems: cartItems.map((item) => ({
+        id: item.productId,
+        name: item.title,
+        category1: item.category || "General",
+        itemType: "PHYSICAL",
+        price: item.price.toFixed(2),
+      })),
     };
 
-    paypal.payment.create(create_payment_json, async (error, paymentInfo) => {
-      if (error) {
-        console.log(error);
+    const paymentResponse = await initializePayment(paymentData);
 
-        return res.status(500).json({
-          success: false,
-          message: "Error while creating paypal payment",
-        });
-      } else {
-        const newlyCreatedOrder = new Order({
-          userId,
-          cartId,
-          cartItems,
-          addressInfo,
-          orderStatus,
-          paymentMethod,
-          paymentStatus,
-          totalAmount,
-          orderDate,
-          orderUpdateDate,
-          paymentId,
-          payerId,
-        });
+    if (paymentResponse.status !== "success") {
+      return res.status(400).json({
+        success: false,
+        message: "Payment initialization failed",
+        error: paymentResponse.errorMessage,
+      });
+    }
 
-        await newlyCreatedOrder.save();
+    const newlyCreatedOrder = new Order({
+      userId,
+      cartId,
+      cartItems,
+      addressInfo,
+      orderStatus,
+      paymentMethod: "iyzico",
+      paymentStatus: "pending",
+      totalAmount,
+      orderDate,
+      orderUpdateDate,
+      paymentId: paymentResponse.paymentId,
+    });
 
-        const approvalURL = paymentInfo.links.find(
-          (link) => link.rel === "approval_url"
-        ).href;
+    await newlyCreatedOrder.save();
 
-        res.status(201).json({
-          success: true,
-          approvalURL,
-          orderId: newlyCreatedOrder._id,
-        });
-      }
+    res.status(201).json({
+      success: true,
+      message: "Order created successfully",
+      orderId: newlyCreatedOrder._id,
+      paymentResponse,
     });
   } catch (e) {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Some error occured!",
+      message: "Some error occurred while creating the order",
     });
   }
 };
 
+
 const capturePayment = async (req, res) => {
   try {
-    const { paymentId, payerId, orderId } = req.body;
+    const { orderId } = req.body;
 
     let order = await Order.findById(orderId);
 
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: "Order can not be found",
+        message: "Order not found",
+      });
+    }
+
+    if (order.paymentStatus === "paid") {
+      return res.status(400).json({
+        success: false,
+        message: "Order already paid",
       });
     }
 
     order.paymentStatus = "paid";
     order.orderStatus = "confirmed";
-    order.paymentId = paymentId;
-    order.payerId = payerId;
 
     for (let item of order.cartItems) {
       let product = await Product.findById(item.productId);
 
-      if (!product) {
+      if (!product || product.totalStock < item.quantity) {
         return res.status(404).json({
           success: false,
-          message: `Not enough stock for this product ${product.title}`,
+          message: `Not enough stock for product: ${item.title}`,
         });
       }
 
       product.totalStock -= item.quantity;
-
       await product.save();
     }
 
@@ -135,17 +158,18 @@ const capturePayment = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Order confirmed",
+      message: "Order confirmed and payment captured",
       data: order,
     });
   } catch (e) {
     console.log(e);
     res.status(500).json({
       success: false,
-      message: "Some error occured!",
+      message: "Some error occurred while capturing the payment",
     });
   }
 };
+
 
 const getAllOrdersByUser = async (req, res) => {
   try {

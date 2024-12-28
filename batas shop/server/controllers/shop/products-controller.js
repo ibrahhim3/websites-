@@ -1,4 +1,6 @@
 const Product = require("../../models/Product");
+
+
 const getFilteredProducts = async (req, res) => {
   try {
     const { category = [], sortBy = "price-lowtohigh" } = req.query;
@@ -9,6 +11,9 @@ const getFilteredProducts = async (req, res) => {
       // Check if the category is sales, and filter based on salePrice
       if (category.includes("sales")) {
         filters.salePrice = { $gt: 0 }; // Only products with salePrice > 0
+      } else if (category.includes("best")) {
+        // Only products with stock < 5
+        filters.totalStock = { $lt: 5 };
       } else {
         filters.category = { $in: category.split(",") };
       }
