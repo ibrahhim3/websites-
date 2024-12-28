@@ -47,17 +47,14 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             backgroundColor: "white",
             color: "black",
           },
-           duration: 3000,
+          duration: 3000,
         });
-        
       }
     });
   }
-  
- function handleAddToCart(getCurrentProductId) {
-  
-  
-  /*  let getCartItems = cartItems.items || [];
+
+  function handleAddToCart(getCurrentProductId) {
+    /*  let getCartItems = cartItems.items || [];
 
     if (getCartItems.length) {
       const indexOfCurrentItem = getCartItems.findIndex(
@@ -95,25 +92,23 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
       }
     });
   }
-  
+
   function handleDialogClose() {
     setOpen(false);
     dispatch(setProductDetails());
     setRating(0);
     setReviewMsg("");
-   
   }
-
 
   useEffect(() => {
     if (productDetails !== null) dispatch(getReviews(productDetails?._id));
   }, [productDetails]);
 
   console.log(reviews, "reviews");
-  
+
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
-      <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] bg-white">
+      <DialogContent className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw] bg-white overflow-y-auto max-h-[90vh]">
         <div className="relative overflow-hidden rounded-lg">
           <img
             src={productDetails?.image}
@@ -124,52 +119,47 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           />
         </div>
 
-        <div className="">
+        <div>
           <div>
-            <h1 className="text-3xl font-extrabold">{productDetails?.title}</h1>
-            <p className=" text-gray-500 text-2xl mb-5 mt-4">
+            <h1 className="text-3xl sm:text-2xl font-extrabold">
+              {productDetails?.title}
+            </h1>
+            <p className="text-gray-500 text-lg sm:text-xl mb-5 mt-4">
               {productDetails?.description}
             </p>
           </div>
 
           <div className="flex items-center justify-between">
             <p
-              className={`text-3xl font-bold  text-primary ${
+              className={`text-3xl font-bold text-primary ${
                 productDetails?.salePrice > 0 ? "line-through" : ""
               }`}
             >
               ${productDetails?.price}
             </p>
             {productDetails?.salePrice > 0 ? (
-              <p className="text-2xl font-bold  text-gray-500">
+              <p className="text-2xl font-bold text-gray-500">
                 ${productDetails?.salePrice}
               </p>
             ) : null}
           </div>
 
-          <div className=" flex item-center gap-2 mt-2">
+          <div className="flex item-center gap-2 mt-2">
             <div className="flex items-center gap-0.5">
               <StarIcon className="w-5 h-5 fill-black" />
-
               <StarIcon className="w-5 h-5 fill-black" />
-
               <StarIcon className="w-5 h-5 fill-black" />
-
               <StarIcon className="w-5 h-5 fill-black" />
-
-              <StarIcon className=" w-5 h-5 fill-black" />
+              <StarIcon className="w-5 h-5 fill-black" />
             </div>
-
             <span className="text-gray-500">(4.5)</span>
           </div>
 
           <div className="mt-5 mb-5">
-            <Button onClick={() =>
-                  handleAddToCart(
-                    productDetails?._id,
-                 
-                  )
-                } className="w-full bg-red-600 hover:bg-red-700 text-black">
+            <Button
+              onClick={() => handleAddToCart(productDetails?._id)}
+              className="w-full bg-red-600 hover:bg-red-700 text-black"
+            >
               Add to Cart
             </Button>
           </div>
@@ -179,98 +169,83 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           <div className="max-h-[300px] overflow-auto">
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
             <div className="grid gap-6">
-
-              
               <div className="flex gap-4">
                 <Avatar className="w-10 h-10 border">
                   <AvatarFallback>SM</AvatarFallback>
                 </Avatar>
-
                 <div className="grid gap-1">
                   <div className="flex items-center gap-2">
                     <h3 className="font-bold">user name</h3>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
-                    <StarIcon className=" w-5 h-5 fill-black" />
+                    <StarIcon className="w-5 h-5 fill-black" />
                   </div>
-                  
-                  <p className="text-gray-500"> this is an awsome products</p>
+                  <p className="text-gray-500">this is an awesome product</p>
                 </div>
-                
               </div>
               <div className="flex gap-4">
                 <Avatar className="w-10 h-10 border">
                   <AvatarFallback>SM</AvatarFallback>
                 </Avatar>
-
                 <div className="grid gap-1">
                   <div className="flex items-center gap-2">
                     <h3 className="font-bold">user name</h3>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
-                    <StarIcon className=" w-5 h-5 fill-black" />
+                    <StarIcon className="w-5 h-5 fill-black" />
                   </div>
-                  
-                  <p className="text-gray-500"> this is an awsome products</p>
+                  <p className="text-gray-500">this is an awesome product</p>
                 </div>
-                
               </div>
               <div className="flex gap-4">
                 <Avatar className="w-10 h-10 border">
                   <AvatarFallback>SM</AvatarFallback>
                 </Avatar>
-
                 <div className="grid gap-1">
                   <div className="flex items-center gap-2">
                     <h3 className="font-bold">user name</h3>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
                     <StarIcon className="w-5 h-5 fill-black" />
-
-                    <StarIcon className=" w-5 h-5 fill-black" />
+                    <StarIcon className="w-5 h-5 fill-black" />
                   </div>
-                  
-                  <p className="text-gray-500"> This is awesome product</p>
+                  <p className="text-gray-500">This is an awesome product</p>
                 </div>
-                
               </div>
             </div>
+
             <div className="mt-10 flex flex-col gap-2">
-            <Label>Write a review</Label>
+              <Label>Write a review</Label>
               <div className="flex gap-1">
                 <StarRatingComponent
                   rating={rating}
                   handleRatingChange={handleRatingChange}
                 />
               </div>
-            <Input name="reviewMsg"
+              <Input
+                name="reviewMsg"
                 value={reviewMsg}
-                onChange={(event) => setReviewMsg(event.target.value)} placeholder="write a review..."/>
-            <Button  onClick={handleAddReview} disabled={reviewMsg.trim() === ""} className='bg-gray-700 text-white'>submit</Button>
-
-
+                onChange={(event) => setReviewMsg(event.target.value)}
+                placeholder="Write a review..."
+              />
+              <Button
+                onClick={handleAddReview}
+                disabled={reviewMsg.trim() === ""}
+                className="bg-gray-700 text-white"
+              >
+                Submit
+              </Button>
             </div>
           </div>
         </div>
