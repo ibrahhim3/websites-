@@ -63,6 +63,13 @@ const loginUser = async (req, res) => {
           success: false,
           message: "User doesn't exists! Please register first",
         });
+
+
+      if (!checkUser.isActive)
+        return res.json({
+          success: false,
+          message: "Account is not activated! Please check your email to activate it.",
+        });
   
       const checkPasswordMatch = await bcrypt.compare(
         password,
