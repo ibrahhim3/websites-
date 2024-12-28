@@ -17,6 +17,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
+
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
@@ -141,33 +142,33 @@ function HeaderRightContent() {
 
 
 
-
-
-
-
-
-
-
 function ShoppingHeader() {
   const { isAuthenticated } = useSelector((state) => state.auth);
+  const [openMenuSheet, setOpenMenuSheet] = useState(false);
+  const location = useLocation();  // Use useLocation to track the current route
+
+  // Close the sheet whenever the route changes
+  useEffect(() => {
+    setOpenMenuSheet(false); // Close the sheet on route change
+  }, [location]);  // Dependency on location, which changes on navigation
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-3">
           <img
-            src="/images/logo.png" // Path to the logo in the public folder
+            src="/images/logo.png"
             alt="BATAŞ Logo"
-            className="h-16 w-16 rounded-full object-cover bg-black" // Bigger size and circular shape
+            className="h-16 w-16 rounded-full object-cover bg-black"
           />
-
           <span className="flex flex-col items-center text-red-600">
-            <span className="text-4xl  font-bold">BATAŞ</span>
-            <span className="text-lg font-medium ">spice shop</span>
+            <span className="text-4xl font-bold">BATAŞ</span>
+            <span className="text-lg font-medium">spice shop</span>
           </span>
         </Link>
-       
-        <Sheet>
+
+        {/* Mobile Menu Sheet */}
+        <Sheet open={openMenuSheet} onOpenChange={setOpenMenuSheet}>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="lg:hidden">
               <Menu className="h-6 w-6" />
@@ -192,5 +193,4 @@ function ShoppingHeader() {
     </header>
   );
 }
-
 export default ShoppingHeader;
