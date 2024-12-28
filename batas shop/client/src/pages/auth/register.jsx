@@ -30,23 +30,20 @@ function AuthRegister() {
           },
           duration: 3000,
         });
-        navigate("/auth/login");
-      }else{
+        navigate("/auth/verify");
+      } else {
         toast({
           title: data?.payload?.message,
-          variant: 'destructive',
+          variant: "destructive",
           style: {
             backgroundColor: "white",
             color: "black",
           },
           duration: 3000,
         });
-
       }
-     
     });
   }
-
 
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
