@@ -1,7 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
-
+const crypto = require('crypto');
+const sendActivationEmail = require('../../helpers/nodemailer');
 
 
 
@@ -26,7 +27,17 @@ const registerUser = async(req, res) => {
             password : hashPassword,
         });
 
+        const verificationCode = crypto.randomInt(100000, 999999).toString();
+
+        // Set the verification code and its expiration time (e.g., 1 hour)
+        newUser.verificationCode = verificationCode;
+        newUser.verificationCodeExpires = Date.now() + 3600000; // 1 hour
+
+
         await newUser.save()
+
+        await sendActivationEmail(email, verificationCode);
+
         res.status(200).json({
             success : true,
             message : "Registration successful ",
@@ -128,8 +139,74 @@ const authMiddleware = async (req, res, next) => {
   }
 };
 
+/*
+const activateAccount = async (req, res) => {
+  const { token } = req.params;
 
-module.exports = {registerUser, loginUser, logoutUser, authMiddleware };
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET); // Verify the token
+    const user = await User.findById(decoded.id);
+
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    if (user.isActive) return res.status(400).json({ message: 'Account already activated' });
+
+    user.isActive = true; // Activate the account
+    await user.save();
+
+    res.status(200).json({ message: 'Account activated successfully!' });
+  } catch (e) {
+    res.status(400).json({ message: 'Invalid or expired token', error: e.message });
+  }
+};*/
+
+
+const verifyCode = async (req, res) => {
+  const { email, code } = req.body;
+
+  try {
+    const checkUser = await User.findOne({ email });
+    if (!checkUser)
+      return res.json({
+        success: false,
+        message: "User doesn't exist!",
+      });
+
+    if (checkUser.verificationCode !== code)
+      return res.json({
+        success: false,
+        message: "Invalid verification code!",
+      });
+
+    if (checkUser.verificationCodeExpires < Date.now())
+      return res.json({
+        success: false,
+        message: "Verification code has expired!",
+      });
+
+    // Activate the user's account
+    checkUser.isActive = true;
+    checkUser.verificationCode = null; // Clear the verification code
+    checkUser.verificationCodeExpires = null; // Clear the expiration time
+    await checkUser.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Account successfully activated!",
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "Some error occurred",
+    });
+  }
+};
+
+
+
+
+module.exports = {registerUser, loginUser, logoutUser, authMiddleware, verifyCode };
 
 
 

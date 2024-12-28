@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  approvalURL: null,
+  checkoutForm: null, // Iyzico uses a checkout form instead of a direct approval URL
   isLoading: false,
   orderId: null,
   orderList: [],
@@ -13,7 +13,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/create`,
+      "http://localhost:5173/api/shop/order/create", // Your Iyzico `createOrder` endpoint
       orderData
     );
 
@@ -23,12 +23,11 @@ export const createNewOrder = createAsyncThunk(
 
 export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
-  async ({ paymentId, payerId, orderId }) => {
+  async ({ token, orderId }) => {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/capture`,
+      "http://localhost:5173/api/shop/order/capture", // Your Iyzico `capturePayment` endpoint
       {
-        paymentId,
-        payerId,
+        token, // Payment token returned by Iyzico
         orderId,
       }
     );
@@ -41,7 +40,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUserId",
   async (userId) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/list/${userId}`
+      `http://localhost:5173/api/shop/order/list/${userId}`
     );
 
     return response.data;
@@ -52,7 +51,7 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/details/${id}`
+      `http://localhost:5173/api/shop/order/details/${id}`
     );
 
     return response.data;
@@ -74,7 +73,7 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.approvalURL = action.payload.approvalURL;
+        state.checkoutForm = action.payload.checkoutFormContent; // Iyzico's checkout form
         state.orderId = action.payload.orderId;
         sessionStorage.setItem(
           "currentOrderId",
@@ -83,8 +82,21 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.rejected, (state) => {
         state.isLoading = false;
-        state.approvalURL = null;
+        state.checkoutForm = null;
         state.orderId = null;
+      })
+      .addCase(capturePayment.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(capturePayment.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // Handle successful payment capture
+        console.log("Payment captured successfully:", action.payload);
+      })
+      .addCase(capturePayment.rejected, (state) => {
+        state.isLoading = false;
+        // Handle payment capture failure
+        console.log("Payment capture failed");
       })
       .addCase(getAllOrdersByUserId.pending, (state) => {
         state.isLoading = true;
