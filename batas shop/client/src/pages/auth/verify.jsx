@@ -19,7 +19,7 @@ function VerifyPage() {
     e.preventDefault();
 
     // Dispatch the verifyUser action with email and verification code
-    dispatch(verifyUser(formData)).then((data) => {
+    dispatch(verifyUser({email: formData.email, code: formData.code})).then((data) => {
       if (data?.payload?.success) {
         toast({
           title: "Verification successful",

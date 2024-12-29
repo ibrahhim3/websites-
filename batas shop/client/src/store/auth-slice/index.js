@@ -83,11 +83,11 @@ export const checkAuth = createAsyncThunk(
 // Verify User
 export const verifyUser = createAsyncThunk(
   "auth/verify",
-  async ({ code }, { rejectWithValue }) => {
+  async ({email,  code }, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/verify`,
-        { code },
+        {email, code },
         { withCredentials: true }
       );
       return response.data;
