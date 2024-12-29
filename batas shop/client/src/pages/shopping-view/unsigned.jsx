@@ -146,6 +146,25 @@ function ShoppingHomeunsigned() {
 
   // Handle adding a product to the cart
   function handleAddtoCart(getCurrentProductId) {
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload?.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast({
+          title: "Product is added to cart",
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
+          duration: 3000,
+        });
+      }
+    });
     if (!user) { // Check if the user is logged in
       navigate("/auth/login"); // Redirect to login page if not logged in
     } else {
@@ -170,7 +189,6 @@ function ShoppingHomeunsigned() {
       });
     }
   }
-  
 
   // Fetch feature images when the component is mounted
   useEffect(() => {
@@ -313,24 +331,21 @@ function ShoppingHomeunsigned() {
             <div
               className="cursor-pointer flex gap-6 animate-scroll"
               style={{
-                animationDuration: `${products.length * 6}s`,
+                animationDuration: `${products.length * 6}s`, // Increased duration for slower scroll
               }}
             >
-              {/* Fill the bar with products to avoid gaps */}
-              {Array.from({ length: Math.ceil(15 / products.length) }).flatMap(() =>
-                products.map((productItem, index) => (
-                  <div
-                    key={`${productItem.id}-${index}`}
-                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]"
-                  >
-                    <ShoppingProductTile
-                      handleGetProductDetails={handleGetProductDetails}
-                      product={productItem}
-                      handleAddtoCart={handleAddtoCart}
-                    />
-                  </div>
-                ))
-              )}
+              {products.concat(products).map((productItem, index) => (
+                <div
+                  key={`${productItem.id}-${index}`}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]" // Ensure consistent width for items
+                >
+                  <ShoppingProductTile
+                    handleGetProductDetails={handleGetProductDetails}
+                    product={productItem}
+                    handleAddtoCart={handleAddtoCart}
+                  />
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -340,6 +355,8 @@ function ShoppingHomeunsigned() {
     )}
   </div>
 </section>
+
+
 
 
 
