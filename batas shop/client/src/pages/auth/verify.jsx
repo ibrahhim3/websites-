@@ -5,16 +5,21 @@ import { verifyUser } from "@/store/auth-slice";
 import { useNavigate } from "react-router-dom";
 
 function VerifyPage() {
-  const [verificationCode, setVerificationCode] = useState("");
+  const [formData, setFormData] = useState({ email: "", code: "" });
   const dispatch = useDispatch();
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Dispatch the verifyUser action with the verification code
-    dispatch(verifyUser({ code: verificationCode })).then((data) => {
+    // Dispatch the verifyUser action with email and verification code
+    dispatch(verifyUser(formData)).then((data) => {
       if (data?.payload?.success) {
         toast({
           title: "Verification successful",
@@ -46,14 +51,24 @@ function VerifyPage() {
           Verify Your Account
         </h1>
         <p className="mt-2">
-          Please enter the verification code sent to your email.
+          Please enter your email and the verification code sent to your email.
         </p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          placeholder="Enter your email"
+          className="w-full p-2 border rounded"
+          required
+        />
+        <input
           type="text"
-          value={verificationCode}
-          onChange={(e) => setVerificationCode(e.target.value)}
+          name="code"
+          value={formData.code}
+          onChange={handleChange}
           placeholder="Enter verification code"
           className="w-full p-2 border rounded"
           required
