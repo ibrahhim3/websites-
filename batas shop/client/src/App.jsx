@@ -2,6 +2,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import AuthLayout from "./components/auth/layout";
 import AuthLogin from "./pages/auth/login";
 import AuthRegister from "./pages/auth/register";
+import VerifyPage from "./pages/auth/verify";
 import AdminLayout from "./components/admin-view/layout";
 import AdminProducts from "./pages/admin-view/products";
 import AdminOrders from "./pages/admin-view/orders";
@@ -32,14 +33,21 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
-  if (isLoading) return <Skeleton className="w-[800] bg-black h-[600px]" />;
+  // Show a loading skeleton until auth check is completed
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Skeleton className="w-[800px] h-[600px] bg-gray-200" />
+      </div>
+    );
+  }
 
-  console.log(isLoading, user);
+  console.log("User State:", isLoading, user);
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
       <Routes>
-        {/* Redirect to ShoppingHomeunsigned if not authenticated, otherwise ShoppingHome */}
+        {/* Default route: Redirect to unsigned home or shopping home */}
         <Route
           path="/"
           element={
@@ -50,18 +58,18 @@ function App() {
             )
           }
         />
+
+        {/* Auth Routes */}
         <Route
           path="/auth"
-          element={
-            <CheckAuth isAuthenticated={isAuthenticated} user={user}>
-              <AuthLayout />
-            </CheckAuth>
-          }
+          element={<AuthLayout />}
         >
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
-
+          <Route path="verify" element={<VerifyPage />} />
         </Route>
+
+        {/* Admin Routes */}
         <Route
           path="/admin"
           element={
@@ -75,6 +83,8 @@ function App() {
           <Route path="orders" element={<AdminOrders />} />
           <Route path="features" element={<AdminFeatures />} />
         </Route>
+
+        {/* Shopping Routes */}
         <Route
           path="/shop"
           element={
@@ -89,7 +99,11 @@ function App() {
           <Route path="account" element={<ShoppingAccount />} />
           <Route path="search" element={<SearchProducts />} />
         </Route>
+
+        {/* Unauthorized Access Page */}
         <Route path="/unauth-page" element={<UnauthPage />} />
+
+        {/* 404 Not Found */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

@@ -30,7 +30,7 @@ function AuthRegister() {
           },
           duration: 3000,
         });
-        navigate("/auth/login");
+        navigate("/auth/verify");
       } else {
         toast({
           title: data?.payload?.message,
