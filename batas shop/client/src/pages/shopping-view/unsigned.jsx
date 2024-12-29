@@ -146,26 +146,31 @@ function ShoppingHomeunsigned() {
 
   // Handle adding a product to the cart
   function handleAddtoCart(getCurrentProductId) {
-    dispatch(
-      addToCart({
-        userId: user?.id,
-        productId: getCurrentProductId,
-        quantity: 1,
-      })
-    ).then((data) => {
-      if (data?.payload?.success) {
-        dispatch(fetchCartItems(user?.id));
-        toast({
-          title: "Product is added to cart",
-          style: {
-            backgroundColor: "white",
-            color: "black",
-          },
-          duration: 3000,
-        });
-      }
-    });
+    if (!user) { // Check if the user is logged in
+      navigate("/auth/login"); // Redirect to login page if not logged in
+    } else {
+      dispatch(
+        addToCart({
+          userId: user?.id,
+          productId: getCurrentProductId,
+          quantity: 1,
+        })
+      ).then((data) => {
+        if (data?.payload?.success) {
+          dispatch(fetchCartItems(user?.id));
+          toast({
+            title: "Product is added to cart",
+            style: {
+              backgroundColor: "white",
+              color: "black",
+            },
+            duration: 3000,
+          });
+        }
+      });
+    }
   }
+  
 
   // Fetch feature images when the component is mounted
   useEffect(() => {
