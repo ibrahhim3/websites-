@@ -1,19 +1,21 @@
 import CommonForm from "@/components/common/form";
-import { loginFormControls} from "@/config";
+import { loginFormControls } from "@/config";
 import { useToast } from "@/hooks/use-toast";
 import { loginUser } from "@/store/auth-slice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // Add useNavigate here
 
 const initialState = {
   email: "",
   password: "",
 };
+
 function AuthLogin() {
   const [formData, setFormData] = useState(initialState);
   const dispatch = useDispatch();
   const { toast } = useToast();
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   function onSubmit(event) {
     event.preventDefault();
@@ -28,6 +30,7 @@ function AuthLogin() {
           },
           duration: 3000,
         });
+        navigate("/shop/home"); // Redirect to the home page upon successful login
       } else {
         toast({
           title: data?.payload?.message,
@@ -49,12 +52,12 @@ function AuthLogin() {
           Sign in to your account
         </h1>
         <p className="mt-2">
-          dont have an account?
+          Dont have an account?
           <Link
             className="font-medium ml-2 text-primary hover:underline"
             to="/auth/register"
           >
-            register
+            Register
           </Link>
         </p>
       </div>
