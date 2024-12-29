@@ -7,13 +7,15 @@
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-50%); /* Move the row by 50% */
+    transform: translateX(-100%); /* Move through all the items */
   }
 }
 
 .animate-scroll {
   display: flex;
-  animation: scroll linear infinite;
+  gap: 1.5rem; /* Space between items */
+  animation: scroll 40s linear infinite; /* Adjust duration for speed */
+  will-change: transform;
 }
 
 

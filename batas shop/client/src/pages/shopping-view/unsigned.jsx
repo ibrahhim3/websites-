@@ -306,23 +306,26 @@ function ShoppingHomeunsigned() {
           {/* Auto-Moving Row */}
           <div className="relative overflow-hidden">
             <div
-              className="flex gap-6 animate-scroll"
+              className="cursor-pointer flex gap-6 animate-scroll"
               style={{
-                animationDuration: `${products.length * 6}s`, // Increased duration for slower scroll
+                animationDuration: `${products.length * 6}s`,
               }}
             >
-              {products.concat(products).map((productItem, index) => (
-                <div
-                  key={`${productItem.id}-${index}`}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]" // Ensure consistent width for items
-                >
-                  <ShoppingProductTile
-                    handleGetProductDetails={handleGetProductDetails}
-                    product={productItem}
-                    handleAddtoCart={handleAddtoCart}
-                  />
-                </div>
-              ))}
+              {/* Fill the bar with products to avoid gaps */}
+              {Array.from({ length: Math.ceil(15 / products.length) }).flatMap(() =>
+                products.map((productItem, index) => (
+                  <div
+                    key={`${productItem.id}-${index}`}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]"
+                  >
+                    <ShoppingProductTile
+                      handleGetProductDetails={handleGetProductDetails}
+                      product={productItem}
+                      handleAddtoCart={handleAddtoCart}
+                    />
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -332,8 +335,6 @@ function ShoppingHomeunsigned() {
     )}
   </div>
 </section>
-
-
 
 
 

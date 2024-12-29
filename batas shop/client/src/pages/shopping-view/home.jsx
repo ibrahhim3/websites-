@@ -99,7 +99,7 @@ function ShoppingHome() {
     dispatch(getFeatureImages());
   }, [dispatch]);
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className=" flex flex-col min-h-screen">
       <div className="relative w-full h-[400px] overflow-hidden">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((slide, index) => (
@@ -116,7 +116,7 @@ function ShoppingHome() {
         <Button
           variant="outline"
           size="icon"
-          className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80"
+          className=" absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80"
           onClick={() =>
             setCurrentSlide(
               (prevSlide) =>
@@ -187,53 +187,56 @@ function ShoppingHome() {
 
 
 
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-6">
-          {productList && productList.length > 0 ? (
-            // Group products by category
-            Object.entries(
-              productList.reduce((acc, product) => {
-                const category = product.category || "Uncategorized"; // Default category
-                if (!acc[category]) acc[category] = [];
-                acc[category].push(product);
-                return acc;
-              }, {})
-            ).map(([category, products]) => (
-              <div key={category} className="mb-12">
-                {/* Category Title */}
-                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                  {category}
-                </h2>
-
-                {/* Auto-Moving Row */}
-                <div className="relative overflow-hidden group">
+      <section className=" py-16 bg-gray-50">
+  <div className=" container mx-auto px-6">
+    {productList && productList.length > 0 ? (
+      // Group products by category
+      Object.entries(
+        productList.reduce((acc, product) => {
+          const category = product.category || "Uncategorized"; // Default category
+          if (!acc[category]) acc[category] = [];
+          acc[category].push(product);
+          return acc;
+        }, {})
+      ).map(([category, products]) => (
+        <div key={category} className="mb-12">
+          {/* Category Title */}
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            {category}
+          </h2>
+          {/* Auto-Moving Row */}
+          <div className="relative overflow-hidden">
+            <div
+              className="cursor-pointer flex gap-6 animate-scroll"
+              style={{
+                animationDuration: `${products.length * 6}s`,
+              }}
+            >
+              {/* Fill the bar with products to avoid gaps */}
+              {Array.from({ length: Math.ceil(15 / products.length) }).flatMap(() =>
+                products.map((productItem, index) => (
                   <div
-                    className="flex gap-6 animate-scroll"
-                    style={{
-                      animationDuration: `${products.length * 6}s`, // Increased duration for slower scroll
-                    }}
+                    key={`${productItem.id}-${index}`}
+                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]"
                   >
-                    {products.concat(products).map((productItem, index) => (
-                      <div
-                        key={`${productItem.id}-${index}`}
-                        className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]" // Ensure consistent width for items
-                      >
-                        <ShoppingProductTile
-                          handleGetProductDetails={handleGetProductDetails}
-                          product={productItem}
-                          handleAddtoCart={handleAddtoCart}
-                        />
-                      </div>
-                    ))}
+                    <ShoppingProductTile
+                      handleGetProductDetails={handleGetProductDetails}
+                      product={productItem}
+                      handleAddtoCart={handleAddtoCart}
+                    />
                   </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p className="text-center text-gray-500">No products available.</p>
-          )}
+                ))
+              )}
+            </div>
+          </div>
         </div>
-      </section>
+      ))
+    ) : (
+      <p className="text-center text-gray-500">No products available.</p>
+    )}
+  </div>
+</section>
+
 
       <ProductDetailsDialog
         open={openDetailsDialog}
