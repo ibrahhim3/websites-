@@ -5,7 +5,28 @@ const initialState = {
   isAuthenticated: false,
   isLoading: true,
   user: null,
+  verificationStatus: null, // Add a new state for verification status
+  verificationLoading: false, // Add loading state for verification process
 };
+
+
+
+
+export const verifyUser = createAsyncThunk(
+  "/auth/verify",
+  async (formData) => {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/api/auth/verify`, // Your verification endpoint
+      formData,
+      {
+        withCredentials: true,
+      }
+    );
+
+    return response.data;
+  }
+);
+
 
 export const registerUser = createAsyncThunk(
   "/auth/register",
@@ -78,7 +99,9 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setUser: (state, action) => {},
+    setUser: (state, action) => {
+      state.user = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -127,9 +150,25 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
+      })
+      // Add the verification cases
+      .addCase(verifyUser.pending, (state) => {
+        state.verificationLoading = true;
+        state.verificationStatus = null; // Reset previous verification status
+      })
+      .addCase(verifyUser.fulfilled, (state, action) => {
+        state.verificationLoading = false;
+        state.verificationStatus = action.payload.success ? "verified" : "failed";
+        if (action.payload.success) {
+          state.isAuthenticated = true; // Assuming verification means the user is authenticated
+          state.user = action.payload.user; // Save user details if successful
+        }
+      })
+      .addCase(verifyUser.rejected, (state, action) => {
+        state.verificationLoading = false;
+        state.verificationStatus = "failed";
       });
   },
 });
-
 export const { setUser } = authSlice.actions;
 export default authSlice.reducer;
