@@ -165,29 +165,6 @@ function ShoppingHomeunsigned() {
         });
       }
     });
-    if (!user) { // Check if the user is logged in
-      navigate("/auth/login"); // Redirect to login page if not logged in
-    } else {
-      dispatch(
-        addToCart({
-          userId: user?.id,
-          productId: getCurrentProductId,
-          quantity: 1,
-        })
-      ).then((data) => {
-        if (data?.payload?.success) {
-          dispatch(fetchCartItems(user?.id));
-          toast({
-            title: "Product is added to cart",
-            style: {
-              backgroundColor: "white",
-              color: "black",
-            },
-            duration: 3000,
-          });
-        }
-      });
-    }
   }
 
   // Fetch feature images when the component is mounted
@@ -329,7 +306,7 @@ function ShoppingHomeunsigned() {
           {/* Auto-Moving Row */}
           <div className="relative overflow-hidden">
             <div
-              className="cursor-pointer flex gap-6 animate-scroll"
+              className="flex gap-6 animate-scroll"
               style={{
                 animationDuration: `${products.length * 6}s`, // Increased duration for slower scroll
               }}
