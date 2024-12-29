@@ -9,6 +9,9 @@ const initialState = {
   verificationLoading: false, // Add loading state for verification process
 };
 
+
+
+
 export const verifyUser = createAsyncThunk(
   "/auth/verify",
   async (formData) => {
@@ -24,8 +27,10 @@ export const verifyUser = createAsyncThunk(
   }
 );
 
+
 export const registerUser = createAsyncThunk(
   "/auth/register",
+
   async (formData) => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/auth/register`,
@@ -41,6 +46,7 @@ export const registerUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "/auth/login",
+
   async (formData) => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/auth/login`,
@@ -56,6 +62,7 @@ export const loginUser = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
   "/auth/logout",
+
   async () => {
     const response = await axios.post(
       `${import.meta.env.VITE_API_URL}/api/auth/logout`,
@@ -71,6 +78,7 @@ export const logoutUser = createAsyncThunk(
 
 export const checkAuth = createAsyncThunk(
   "/auth/checkauth",
+
   async () => {
     const response = await axios.get(
       `${import.meta.env.VITE_API_URL}/api/auth/check-auth`,
@@ -114,6 +122,8 @@ const authSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
+        console.log(action);
+
         state.isLoading = false;
         state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success;
@@ -160,6 +170,5 @@ const authSlice = createSlice({
       });
   },
 });
-
 export const { setUser } = authSlice.actions;
 export default authSlice.reducer;

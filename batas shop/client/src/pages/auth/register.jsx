@@ -30,8 +30,7 @@ function AuthRegister() {
           },
           duration: 3000,
         });
-        setFormData(initialState); // Reset the form data
-        navigate("/auth/verify"); // Navigate to the verify page
+        navigate("/auth/verify");
       } else {
         toast({
           title: data?.payload?.message,
