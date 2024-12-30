@@ -290,13 +290,13 @@ const resetPassword = async (req, res) => {
       console.log("Token Expiry Time in DB:", checkUser.resetTokenExpires);
       console.log("Current Time:", Date.now());
 
-      /*if (checkUser.resetTokenExpires < Date.now()) {
+      if (checkUser.resetTokenExpires < Date.now()) {
           console.error("Token has expired.");
           return res.status(400).json({
               success: false,
               message: "Reset token has expired!",
           });
-      }*/
+      }
 
       const hashPassword = await bcrypt.hash(newPassword, 12);
       checkUser.password = hashPassword;
