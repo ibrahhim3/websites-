@@ -3,6 +3,8 @@ import AuthLayout from "./components/auth/layout";
 import AuthLogin from "./pages/auth/login";
 import AuthRegister from "./pages/auth/register";
 import VerifyPage from "./pages/auth/verify";
+import RequestPasswordPage from "./pages/auth/RequestPasswordPage";
+import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
 import AdminLayout from "./components/admin-view/layout";
 import AdminProducts from "./pages/admin-view/products";
 import AdminOrders from "./pages/admin-view/orders";
@@ -67,6 +69,8 @@ function App() {
           <Route path="login" element={<AuthLogin />} />
           <Route path="register" element={<AuthRegister />} />
           <Route path="verify" element={<VerifyPage />} />
+          <Route path="request-reset" element={<RequestPasswordPage />} /> {/* New route */}
+          <Route path="reset-password/:token" element={<ResetPasswordPage />} /> {/* New route */}
         </Route>
 
         {/* Admin Routes */}

@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 const crypto = require('crypto');
-const sendActivationEmail = require('../../helpers/nodemailer');
+const {sendActivationEmail, sendResetEmail} = require('../../helpers/nodemailer');
 
 
 
@@ -12,6 +12,11 @@ const sendActivationEmail = require('../../helpers/nodemailer');
 const registerUser = async(req, res) => {
     const {userName, email, password} = req.body;
 
+    const validatePassword = (password) => {
+      const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[._])[A-Za-z\d._]{8,}$/;
+      return regex.test(password);
+    };
+
     try{
         const checkUser = await User.findOne({ email});
         if(checkUser)
@@ -19,6 +24,13 @@ const registerUser = async(req, res) => {
         success: false,
         message: "user already exists",
         });
+
+        if (!validatePassword(password)) {
+          return res.status(400).json({
+              success: false,
+              message: "Password must be at least 8 characters long and include letters, numbers, and one of the following: . _",
+          });
+        }
 
         const hashPassword = await bcrypt.hash(password, 12);
         const newUser = new User({
@@ -211,9 +223,106 @@ const verifyCode = async (req, res) => {
 };
 
 
+const requestPasswordReset = async (req, res) => {
+  const { email } = req.body;
+  console.log("Received email:", email);
+
+  if (typeof email !== 'string') {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid email format",
+    });
+  }
+
+  try {
+      const checkUser = await User.findOne({ email });
+      if (!checkUser)
+          return res.json({
+              success: false,
+              message: "User doesn't exist!",
+          });
+
+      const resetToken = crypto.randomBytes(32).toString("hex");
+      checkUser.resetToken = resetToken;
+      checkUser.resetTokenExpires = Date.now() + 24 * 60 * 60 * 1000; 
+      await checkUser.save();
 
 
-module.exports = {registerUser, loginUser, logoutUser, authMiddleware, verifyCode };
+      console.log("Saved Token:", resetToken);
+      console.log("Saved Expiry:", checkUser.resetTokenExpires);
+
+      const resetLink = `${process.env.CLIENT_BASE_URL}/auth/reset-password/${resetToken}`;
+      await sendResetEmail(email, resetLink);
+      console.log("Reset Link Sent:", resetLink);
+
+      res.status(200).json({
+          success: true,
+          message: "Password reset email sent!",
+      });
+  } catch (e) {
+      console.error("Error during password reset:", e);
+      res.status(500).json({
+          success: false,
+          message:  e.message || "Some error occurredddd",
+      });
+  }
+};
+
+
+const resetPassword = async (req, res) => {
+  const { resetToken } = req.params;
+  const { newPassword } = req.body;
+  console.log("Request Params:", req.params);
+  console.log("Reset Token from Request:", resetToken);
+
+  try {
+      console.log("Reset Token from Request:", resetToken);
+      const checkUser = await User.findOne({ resetToken });
+
+      if (!checkUser) {
+          console.error("No user found for the given token.");
+          return res.status(400).json({
+              success: false,
+              message: "Invalid or expired reset token!",
+          });
+      }
+
+      console.log("Token Expiry Time in DB:", checkUser.resetTokenExpires);
+      console.log("Current Time:", Date.now());
+
+      /*if (checkUser.resetTokenExpires < Date.now()) {
+          console.error("Token has expired.");
+          return res.status(400).json({
+              success: false,
+              message: "Reset token has expired!",
+          });
+      }*/
+
+      const hashPassword = await bcrypt.hash(newPassword, 12);
+      checkUser.password = hashPassword;
+      checkUser.resetToken = null; // Invalidate the token
+      checkUser.resetTokenExpires = null; // Clear expiration
+      await checkUser.save();
+
+      console.log("Password reset successfully!");
+      res.status(200).json({
+          success: true,
+          message: "Password reset successfully!",
+      });
+  } catch (e) {
+      console.error("Error resetting password:", e);
+      res.status(500).json({
+          success: false,
+          message: "An error occurred while resetting the password.",
+      });
+  }
+};
+
+
+
+
+
+module.exports = {registerUser, loginUser, logoutUser, authMiddleware, verifyCode, requestPasswordReset, resetPassword};
 
 
 

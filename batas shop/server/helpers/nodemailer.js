@@ -28,4 +28,22 @@ const sendActivationEmail = async (email, verificationCode) => {
   }
 };
 
-module.exports = sendActivationEmail;
+
+const sendResetEmail = async (email, resetLink) => {
+  const mailOptions = {
+    from: '"Your E-Commerce App" <your-email@gmail.com>',
+    to: email,
+    subject: 'Password Reset Request',
+    html: `<p>Click the link below to reset your password:</p><a href="${resetLink}">${resetLink}</a>`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log('Password reset email sent');
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+  }
+};
+
+module.exports = { sendActivationEmail, sendResetEmail };
+

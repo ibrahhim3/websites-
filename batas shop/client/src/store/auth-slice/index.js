@@ -97,6 +97,48 @@ export const verifyUser = createAsyncThunk(
   }
 );
 
+
+export const requestPasswordReset = createAsyncThunk(
+  "auth/request-reset",
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/request-reset`,
+        { email }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+
+
+export const resetPassword = createAsyncThunk(
+  "auth/reset-password",
+  async ({ token, newPassword }, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/reset-password/${token}`,
+        { newPassword }
+      );
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { message: "An unexpected error occurred" }
+      );
+    }
+  }
+);
+
+
+
+
+
+
+
+
 // Auth Slice
 const authSlice = createSlice({
   name: "auth",
@@ -165,6 +207,33 @@ const authSlice = createSlice({
       })
       .addCase(verifyUser.rejected, (state) => {
         state.isLoading = false;
+      })
+      // Password Reset Request
+      .addCase(requestPasswordReset.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(requestPasswordReset.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.resetPasswordStatus = action.payload.success ? "Request Successful" : "Request Failed";
+      })
+      .addCase(requestPasswordReset.rejected, (state, action) => {
+        state.isLoading = false;
+        state.resetPasswordStatus = "Request Failed";
+        state.resetPasswordError = action.payload;
+      })
+
+      // Reset Password
+      .addCase(resetPassword.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.resetPasswordStatus = action.payload.success ? "Password Reset Successful" : "Password Reset Failed";
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.resetPasswordStatus = "Password Reset Failed";
+        state.resetPasswordError = action.payload;
       });
   },
 });

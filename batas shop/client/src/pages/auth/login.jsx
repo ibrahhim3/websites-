@@ -60,6 +60,14 @@ function AuthLogin() {
             Register
           </Link>
         </p>
+        <p className="mt-2">
+          <Link
+            className="font-medium text-primary hover:underline"
+            to="/auth/request-reset" // Redirects to reset password request page
+          >
+            Forgot Password?
+          </Link>
+        </p>
       </div>
       <CommonForm
         formControls={loginFormControls}

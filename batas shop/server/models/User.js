@@ -32,6 +32,14 @@ const UserSchema = mongoose.Schema( {
             type: Date,
             default: null,
           },
+        resetToken: { // Field for password reset token
+            type: String,
+            default: null,
+        },
+        resetTokenExpires: { // Field to track when the reset token expires
+            type: Date,
+            default: null,
+        },
     });
 
 
