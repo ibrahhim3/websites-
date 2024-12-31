@@ -225,7 +225,6 @@ const verifyCode = async (req, res) => {
 
 const requestPasswordReset = async (req, res) => {
   const { email } = req.body;
-  console.log("Received email:", email);
 
   if (typeof email !== 'string') {
     return res.status(400).json({
@@ -247,13 +246,8 @@ const requestPasswordReset = async (req, res) => {
       checkUser.resetTokenExpires = Date.now() + 24 * 60 * 60 * 1000; 
       await checkUser.save();
 
-
-      console.log("Saved Token:", resetToken);
-      console.log("Saved Expiry:", checkUser.resetTokenExpires);
-
       const resetLink = `${process.env.CLIENT_BASE_URL}/auth/reset-password/${resetToken}`;
       await sendResetEmail(email, resetLink);
-      console.log("Reset Link Sent:", resetLink);
 
       res.status(200).json({
           success: true,
@@ -270,14 +264,15 @@ const requestPasswordReset = async (req, res) => {
 
 
 const resetPassword = async (req, res) => {
-  const { resetToken } = req.params;
+  const { token } = req.params;
   const { newPassword } = req.body;
-  console.log("Request Params:", req.params);
-  console.log("Reset Token from Request:", resetToken);
+  
 
+  if (!token) {
+    return res.status(400).json({ message: "Token is missing" });
+  }
   try {
-      console.log("Reset Token from Request:", resetToken);
-      const checkUser = await User.findOne({ resetToken });
+      const checkUser = await User.findOne({ resetToken: token });
 
       if (!checkUser) {
           console.error("No user found for the given token.");
@@ -286,9 +281,6 @@ const resetPassword = async (req, res) => {
               message: "Invalid or expired reset token!",
           });
       }
-
-      console.log("Token Expiry Time in DB:", checkUser.resetTokenExpires);
-      console.log("Current Time:", Date.now());
 
       if (checkUser.resetTokenExpires < Date.now()) {
           console.error("Token has expired.");
@@ -304,7 +296,6 @@ const resetPassword = async (req, res) => {
       checkUser.resetTokenExpires = null; // Clear expiration
       await checkUser.save();
 
-      console.log("Password reset successfully!");
       res.status(200).json({
           success: true,
           message: "Password reset successfully!",

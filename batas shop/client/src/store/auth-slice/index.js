@@ -116,9 +116,10 @@ export const requestPasswordReset = createAsyncThunk(
 
 
 export const resetPassword = createAsyncThunk(
-  "auth/reset-password",
+  "auth/reset-password/:token",
   async ({ token, newPassword }, { rejectWithValue }) => {
     try {
+
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/api/auth/reset-password/${token}`,
         { newPassword }
