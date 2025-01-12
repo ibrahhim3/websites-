@@ -28,7 +28,7 @@ function AuthLogin() {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
         navigate("/shop/home"); // Redirect to the home page upon successful login
       } else {
@@ -39,7 +39,7 @@ function AuthLogin() {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     });

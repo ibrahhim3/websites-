@@ -24,7 +24,6 @@ import { useSearchParams } from "react-router-dom";
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
 
-
   for (const [key, value] of Object.entries(filterParams)) {
     if (Array.isArray(value) && value.length > 0) {
       const paramValue = value.join(",");
@@ -43,7 +42,7 @@ function ShoppingListing() {
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
   );
- 
+
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -109,10 +108,7 @@ function ShoppingListing() {
 
   console.log(productList, "productListproductListproductList");
 
-
   function handleAddtoCart(getCurrentProductId) {
-
-
     dispatch(
       addToCart({
         userId: user?.id,
@@ -122,21 +118,17 @@ function ShoppingListing() {
     ).then((data) => {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
-        toast( {
+        toast({
           title: "Product is added to cart",
           style: {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
-         
+          duration: 2000,
         });
       }
     });
   }
-
-
-
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
@@ -162,7 +154,8 @@ function ShoppingListing() {
               <DropdownMenuContent align="end" className="w-[200px] bg-white  ">
                 <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>
                   {sortOptions.map((sortItem) => (
-                    <DropdownMenuRadioItem className=" hover:bg-gray-200 cursor-pointer"
+                    <DropdownMenuRadioItem
+                      className=" hover:bg-gray-200 cursor-pointer"
                       value={sortItem.id}
                       key={sortItem.id}
                     >
@@ -191,7 +184,6 @@ function ShoppingListing() {
         setOpen={setOpenDetailsDialog}
         productDetails={productDetails}
       />
-     
     </div>
   );
 }

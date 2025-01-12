@@ -12,7 +12,6 @@ function ResetPasswordPage() {
   const { toast } = useToast();
   const navigate = useNavigate();
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -24,13 +23,15 @@ function ResetPasswordPage() {
           backgroundColor: "white",
           color: "black",
         },
-        duration: 3000,
+        duration: 2000,
       });
       return;
     }
 
     try {
-      const result = await dispatch(resetPassword({ token, newPassword })).unwrap();
+      const result = await dispatch(
+        resetPassword({ token, newPassword })
+      ).unwrap();
 
       if (result.success) {
         toast({
@@ -39,7 +40,7 @@ function ResetPasswordPage() {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
         navigate("/auth/login"); // Redirect to login after successful reset
       } else {
@@ -50,7 +51,7 @@ function ResetPasswordPage() {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     } catch (error) {
@@ -61,7 +62,7 @@ function ResetPasswordPage() {
           backgroundColor: "white",
           color: "black",
         },
-        duration: 3000,
+        duration: 2000,
       });
     }
   };

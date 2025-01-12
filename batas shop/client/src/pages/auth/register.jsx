@@ -28,7 +28,7 @@ function AuthRegister() {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
         navigate("/auth/verify");
       } else {
@@ -39,7 +39,7 @@ function AuthRegister() {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     });

@@ -37,10 +37,10 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
         title: "You can add max 3 addresses",
         variant: "destructive",
         style: {
-            backgroundColor: "red",
-            color: "white",
-          },
-          duration: 3000,
+          backgroundColor: "red",
+          color: "white",
+        },
+        duration: 2000,
       });
 
       return;
@@ -64,7 +64,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
                 backgroundColor: "white",
                 color: "black",
               },
-              duration: 3000,
+              duration: 2000,
             });
           }
         })
@@ -83,7 +83,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
                 backgroundColor: "white",
                 color: "black",
               },
-              duration: 3000,
+              duration: 2000,
             });
           }
         });
@@ -101,7 +101,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     });

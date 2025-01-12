@@ -47,7 +47,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     });
@@ -87,7 +87,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     });

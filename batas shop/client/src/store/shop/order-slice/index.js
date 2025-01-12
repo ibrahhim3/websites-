@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const initialState = {
-  checkoutForm: null, // Iyzico uses a checkout form instead of a direct approval URL
+  approvalURL: null,
   isLoading: false,
   orderId: null,
   orderList: [],
@@ -13,7 +13,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/create`, // Your Iyzico `createOrder` endpoint
+      `${import.meta.env.VITE_API_URL}/api/shop/order/create`,
       orderData
     );
 
@@ -23,11 +23,12 @@ export const createNewOrder = createAsyncThunk(
 
 export const capturePayment = createAsyncThunk(
   "/order/capturePayment",
-  async ({ token, orderId }) => {
+  async ({ paymentId, payerId, orderId }) => {
     const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/api/shop/order/capture`, // Your Iyzico `capturePayment` endpoint
+      `${import.meta.env.VITE_API_URL}/api/shop/order/capture`,
       {
-        token, // Payment token returned by Iyzico
+        paymentId,
+        payerId,
         orderId,
       }
     );
@@ -73,7 +74,7 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.checkoutForm = action.payload.checkoutFormContent; // Iyzico's checkout form
+        state.approvalURL = action.payload.approvalURL;
         state.orderId = action.payload.orderId;
         sessionStorage.setItem(
           "currentOrderId",
@@ -82,21 +83,8 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(createNewOrder.rejected, (state) => {
         state.isLoading = false;
-        state.checkoutForm = null;
+        state.approvalURL = null;
         state.orderId = null;
-      })
-      .addCase(capturePayment.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(capturePayment.fulfilled, (state, action) => {
-        state.isLoading = false;
-        // Handle successful payment capture
-        console.log("Payment captured successfully:", action.payload);
-      })
-      .addCase(capturePayment.rejected, (state) => {
-        state.isLoading = false;
-        // Handle payment capture failure
-        console.log("Payment capture failed");
       })
       .addCase(getAllOrdersByUserId.pending, (state) => {
         state.isLoading = true;

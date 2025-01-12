@@ -5,7 +5,7 @@ import { requestPasswordReset } from "@/store/auth-slice";
 import { useNavigate } from "react-router-dom";
 
 function RequestPasswordPage() {
-  const [formData, setFormData] = useState({ email: ""});
+  const [formData, setFormData] = useState({ email: "" });
   const dispatch = useDispatch();
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ function RequestPasswordPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(requestPasswordReset(formData.email ))
+    dispatch(requestPasswordReset(formData.email))
       .then((data) => {
         if (data?.payload?.success) {
           toast({
@@ -27,7 +27,7 @@ function RequestPasswordPage() {
               backgroundColor: "white",
               color: "black",
             },
-            duration: 3000,
+            duration: 2000,
           });
           navigate("/auth/login"); // Redirect to login after successful request
         } else {
@@ -38,7 +38,7 @@ function RequestPasswordPage() {
               backgroundColor: "white",
               color: "black",
             },
-            duration: 3000,
+            duration: 2000,
           });
         }
       })
@@ -50,7 +50,7 @@ function RequestPasswordPage() {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       });
   };

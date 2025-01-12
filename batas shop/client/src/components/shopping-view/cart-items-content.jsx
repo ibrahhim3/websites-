@@ -20,7 +20,7 @@ function UserCartItemsContent({ cartItem }) {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     });
@@ -73,7 +73,7 @@ function UserCartItemsContent({ cartItem }) {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     });

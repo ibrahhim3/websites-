@@ -4,7 +4,10 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { fetchProductDetails } from "@/store/shop/products-slice";
-import { getSearchResults, resetSearchResults } from "@/store/shop/search-slice";
+import {
+  getSearchResults,
+  resetSearchResults,
+} from "@/store/shop/search-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
@@ -83,7 +86,7 @@ function SearchProducts() {
             backgroundColor: "white",
             color: "black",
           },
-          duration: 3000,
+          duration: 2000,
         });
       }
     });
@@ -111,7 +114,9 @@ function SearchProducts() {
         </div>
       </div>
       {!searchResults?.length ? (
-        <h1 className="text-5xl font-extrabold text-center">No results found!</h1>
+        <h1 className="text-5xl font-extrabold text-center">
+          No results found!
+        </h1>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
           {searchResults.map((item) => (

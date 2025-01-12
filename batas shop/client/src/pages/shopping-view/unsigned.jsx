@@ -165,7 +165,7 @@ function ShoppingHomeunsigned() {
               backgroundColor: "white",
               color: "black",
             },
-            duration: 3000,
+            duration: 2000,
           });
         }
       });
@@ -247,55 +247,56 @@ function ShoppingHomeunsigned() {
       {/* Featured Products Section */}
 
       <section className=" py-16 bg-gray-50">
-  <div className=" container mx-auto px-6">
-    {productList && productList.length > 0 ? (
-      // Group products by category
-      Object.entries(
-        productList.reduce((acc, product) => {
-          const category = product.category || "Uncategorized"; // Default category
-          if (!acc[category]) acc[category] = [];
-          acc[category].push(product);
-          return acc;
-        }, {})
-      ).map(([category, products]) => (
-        <div key={category} className="mb-12">
-          {/* Category Title */}
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-            {category}
-          </h2>
-          {/* Auto-Moving Row */}
-          <div className="relative overflow-hidden">
-            <div
-              className="cursor-pointer flex gap-6 animate-scroll"
-              style={{
-                animationDuration: `${products.length * 6}s`,
-              }}
-            >
-              {/* Fill the bar with products to avoid gaps */}
-              {Array.from({ length: Math.ceil(15 / products.length) }).flatMap(() =>
-                products.map((productItem, index) => (
+        <div className=" container mx-auto px-6">
+          {productList && productList.length > 0 ? (
+            // Group products by category
+            Object.entries(
+              productList.reduce((acc, product) => {
+                const category = product.category || "Uncategorized"; // Default category
+                if (!acc[category]) acc[category] = [];
+                acc[category].push(product);
+                return acc;
+              }, {})
+            ).map(([category, products]) => (
+              <div key={category} className="mb-12">
+                {/* Category Title */}
+                <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                  {category}
+                </h2>
+                {/* Auto-Moving Row */}
+                <div className="relative overflow-hidden">
                   <div
-                    key={`${productItem.id}-${index}`}
-                    className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]"
+                    className="cursor-pointer flex gap-6 animate-scroll"
+                    style={{
+                      animationDuration: `${products.length * 6}s`,
+                    }}
                   >
-                    <ShoppingProductTile
-                      handleGetProductDetails={handleGetProductDetails}
-                      product={productItem}
-                      handleAddtoCart={handleAddtoCart}
-                    />
+                    {/* Fill the bar with products to avoid gaps */}
+                    {Array.from({
+                      length: Math.ceil(15 / products.length),
+                    }).flatMap(() =>
+                      products.map((productItem, index) => (
+                        <div
+                          key={`${productItem.id}-${index}`}
+                          className="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-2xl transition-shadow duration-300 min-w-[300px]"
+                        >
+                          <ShoppingProductTile
+                            handleGetProductDetails={handleGetProductDetails}
+                            product={productItem}
+                            handleAddtoCart={handleAddtoCart}
+                          />
+                        </div>
+                      ))
+                    )}
                   </div>
-                ))
-              )}
-            </div>
-          </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="text-center text-gray-500">No products available.</p>
+          )}
         </div>
-      ))
-    ) : (
-      <p className="text-center text-gray-500">No products available.</p>
-    )}
-  </div>
-</section>
-
+      </section>
 
       {/* Product Details Dialog */}
       <ProductDetailsDialog

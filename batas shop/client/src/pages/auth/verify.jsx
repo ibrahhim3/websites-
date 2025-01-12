@@ -19,29 +19,31 @@ function VerifyPage() {
     e.preventDefault();
 
     // Dispatch the verifyUser action with email and verification code
-    dispatch(verifyUser({email: formData.email, code: formData.code})).then((data) => {
-      if (data?.payload?.success) {
-        toast({
-          title: "Verification successful",
-          style: {
-            backgroundColor: "white",
-            color: "black",
-          },
-          duration: 3000,
-        });
-        navigate("/auth/login"); // Navigate to the login page after successful verification
-      } else {
-        toast({
-          title: data?.payload?.message || "Verification failed",
-          variant: "destructive",
-          style: {
-            backgroundColor: "white",
-            color: "black",
-          },
-          duration: 3000,
-        });
+    dispatch(verifyUser({ email: formData.email, code: formData.code })).then(
+      (data) => {
+        if (data?.payload?.success) {
+          toast({
+            title: "Verification successful",
+            style: {
+              backgroundColor: "white",
+              color: "black",
+            },
+            duration: 2000,
+          });
+          navigate("/auth/login"); // Navigate to the login page after successful verification
+        } else {
+          toast({
+            title: data?.payload?.message || "Verification failed",
+            variant: "destructive",
+            style: {
+              backgroundColor: "white",
+              color: "black",
+            },
+            duration: 2000,
+          });
+        }
       }
-    });
+    );
   };
 
   return (
