@@ -37,6 +37,11 @@ function AdminOrderDetailsView({ orderDetails }) {
         setFormData(initialFormData);
         toast({
           title: data?.payload?.message,
+          style: {
+            backgroundColor: "white",
+            color: "black",
+          },
+          duration: 2000,
         });
       }
     });
@@ -72,10 +77,10 @@ function AdminOrderDetailsView({ orderDetails }) {
               <Badge
                 className={`py-1 px-3 ${
                   orderDetails?.orderStatus === "confirmed"
-                    ? "bg-green-500"
+                    ? "bg-green-500 text-white"
                     : orderDetails?.orderStatus === "rejected"
-                    ? "bg-red-600"
-                    : "bg-black"
+                    ? "bg-red-600 text-white"
+                    : "bg-black text-white"
                 }`}
               >
                 {orderDetails?.orderStatus}
