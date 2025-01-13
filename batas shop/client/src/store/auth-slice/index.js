@@ -1,11 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 // Initial state
 const initialState = {
-  isAuthenticated: false,
+  isAuthenticated: !!localStorage.getItem("authToken"),
   isLoading: false,
-  user: null,
+  user: JSON.parse(localStorage.getItem("user")) || null,
+  error: null,
+  resetPasswordStatus: null,
+  resetPasswordError: null,
 };
 
 // Register User
@@ -13,14 +18,12 @@ export const registerUser = createAsyncThunk(
   "auth/register",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
-        formData,
-        { withCredentials: true }
-      );
+      const response = await axios.post(`${API_URL}/api/auth/register`, formData, {
+        withCredentials: true,
+      });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || { message: "An unexpected error occurred" });
     }
   }
 );
@@ -30,14 +33,16 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async (formData, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
-        formData,
-        { withCredentials: true }
-      );
+      const response = await axios.post(`${API_URL}/api/auth/login`, formData, {
+        withCredentials: true,
+      });
+      if (response.data.success) {
+        localStorage.setItem("authToken", response.data.token);
+        localStorage.setItem("user", JSON.stringify(response.data.user));
+      }
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || { message: "An unexpected error occurred" });
     }
   }
 );
@@ -47,14 +52,12 @@ export const logoutUser = createAsyncThunk(
   "auth/logout",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/logout`,
-        {},
-        { withCredentials: true }
-      );
+      const response = await axios.post(`${API_URL}/api/auth/logout`, {}, { withCredentials: true });
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || { message: "An unexpected error occurred" });
     }
   }
 );
@@ -64,18 +67,15 @@ export const checkAuth = createAsyncThunk(
   "auth/checkAuth",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/auth/check-auth`,
-        {
-          withCredentials: true,
-          headers: {
-            "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-          },
-        }
-      );
+      const response = await axios.get(`${API_URL}/api/auth/check-auth`, {
+        withCredentials: true,
+        headers: {
+          "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || { message: "An unexpected error occurred" });
     }
   }
 );
@@ -83,62 +83,41 @@ export const checkAuth = createAsyncThunk(
 // Verify User
 export const verifyUser = createAsyncThunk(
   "auth/verify",
-  async ({email,  code }, { rejectWithValue }) => {
+  async ({ email, code }, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/verify`,
-        {email, code },
-        { withCredentials: true }
-      );
+      const response = await axios.post(`${API_URL}/api/auth/verify`, { email, code }, { withCredentials: true });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || { message: "An unexpected error occurred" });
     }
   }
 );
 
-
+// Request Password Reset
 export const requestPasswordReset = createAsyncThunk(
   "auth/request-reset",
   async (email, { rejectWithValue }) => {
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/request-reset`,
-        { email }
-      );
+      const response = await axios.post(`${API_URL}/api/auth/request-reset`, { email });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response.data);
+      return rejectWithValue(error.response?.data || { message: "An unexpected error occurred" });
     }
   }
 );
 
-
-
+// Reset Password
 export const resetPassword = createAsyncThunk(
   "auth/reset-password/:token",
   async ({ token, newPassword }, { rejectWithValue }) => {
     try {
-
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/reset-password/${token}`,
-        { newPassword }
-      );
+      const response = await axios.post(`${API_URL}/api/auth/reset-password/${token}`, { newPassword });
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data || { message: "An unexpected error occurred" }
-      );
+      return rejectWithValue(error.response?.data || { message: "An unexpected error occurred" });
     }
   }
 );
-
-
-
-
-
-
-
 
 // Auth Slice
 const authSlice = createSlice({
@@ -152,52 +131,53 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Register User
       .addCase(registerUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(registerUser.fulfilled, (state) => {
         state.isLoading = false;
       })
-      .addCase(registerUser.rejected, (state) => {
+      .addCase(registerUser.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload?.message || "Registration failed";
       })
 
-      // Login User
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
+        state.error = null;
       })
       .addCase(loginUser.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success;
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.user = null;
         state.isAuthenticated = false;
+        state.error = action.payload?.message || "Login failed";
       })
 
-      // Logout User
       .addCase(logoutUser.fulfilled, (state) => {
         state.isAuthenticated = false;
         state.user = null;
+        state.error = null;
       })
 
-      // Check Auth
       .addCase(checkAuth.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(checkAuth.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.success ? action.payload.user : null;
-        state.isAuthenticated = action.payload.success;
+        state.user = action.payload.success ? action.payload.user : JSON.parse(localStorage.getItem("user"));
+        state.isAuthenticated = action.payload.success || !!localStorage.getItem("authToken");
       })
-      .addCase(checkAuth.rejected, (state) => {
+      .addCase(checkAuth.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload?.message || "Authentication check failed";
       })
 
-      // Verify User
       .addCase(verifyUser.pending, (state) => {
         state.isLoading = true;
       })
@@ -206,10 +186,11 @@ const authSlice = createSlice({
         state.user = action.payload.success ? action.payload.user : null;
         state.isAuthenticated = action.payload.success;
       })
-      .addCase(verifyUser.rejected, (state) => {
+      .addCase(verifyUser.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload?.message || "Verification failed";
       })
-      // Password Reset Request
+
       .addCase(requestPasswordReset.pending, (state) => {
         state.isLoading = true;
       })
@@ -223,7 +204,6 @@ const authSlice = createSlice({
         state.resetPasswordError = action.payload;
       })
 
-      // Reset Password
       .addCase(resetPassword.pending, (state) => {
         state.isLoading = true;
       })
