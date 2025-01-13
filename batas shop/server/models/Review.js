@@ -1,14 +1,14 @@
-const mongoose = require("mongoose") ;
+const mongoose = require("mongoose");
 
-const Review = new mongoose.Schema( 
-    {
-        ProductID : String ,
-        UserID : String ,
-        Username : String ,
-        Message : String ,
-        Value_1_to_5 : Number ,
-    } ,
-    { timestamps: true }
-) ;
+const ProductReviewSchema = new mongoose.Schema(
+  {
+    productId: String,
+    userId: String,
+    userName: String,
+    reviewMessage: String,
+    reviewValue: Number,
+  },
+  { timestamps: true }
+);
 
-module.exports = mongoose.model("Review",Review);
+module.exports = mongoose.model("ProductReview", ProductReviewSchema);
